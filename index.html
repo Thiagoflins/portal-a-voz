@@ -1261,6 +1261,119 @@ button:focus:not(:focus-visible) { outline: none; }
   }
 }
 
+/* ==========================================================================
+   SEÇÕES EXTRAS — HOME
+   ========================================================================== */
+
+/* Welcome card */
+.welcome-wrap {
+  padding: 0 16px 56px;
+  background: var(--background);
+}
+.welcome-card {
+  max-width: 1100px; margin: 0 auto;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 36px 40px;
+  box-shadow: var(--shadow-card);
+}
+.welcome-card h2 {
+  font-size: clamp(20px, 3vw, 28px);
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.welcome-card p {
+  font-size: 15px; line-height: 1.7;
+  color: var(--muted);
+  max-width: 72ch;
+}
+@media (max-width: 600px) {
+  .welcome-card { padding: 24px 20px; }
+}
+
+/* Como funciona — fundo laranja */
+.how-wrap {
+  padding: 0 16px 56px;
+  background: var(--background);
+}
+.how-card {
+  max-width: 1100px; margin: 0 auto;
+  background: var(--electric-orange);
+  border-radius: var(--radius-lg);
+  padding: 40px 44px;
+}
+.how-card h2 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(20px, 3vw, 26px);
+  color: var(--acid-green);
+  margin-bottom: 28px;
+}
+.how-steps { display: flex; flex-direction: column; gap: 20px; }
+.how-step {
+  display: flex; align-items: flex-start; gap: 16px;
+}
+.how-step-num {
+  width: 32px; height: 32px; flex-shrink: 0;
+  background: var(--acid-green); color: var(--deep-indigo);
+  font-family: var(--font-display); font-weight: 800; font-size: 14px;
+  border-radius: 9px;
+  display: grid; place-items: center;
+  margin-top: 2px;
+}
+.how-step-body h4 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 16px; color: var(--white);
+  margin-bottom: 4px;
+}
+.how-step-body p {
+  font-size: 14px; line-height: 1.5;
+  color: rgba(255,255,255,0.8);
+}
+@media (max-width: 600px) {
+  .how-card { padding: 28px 22px; }
+}
+
+/* Feature grid 2×2 */
+.features-wrap {
+  padding: 0 16px 72px;
+  background: var(--background);
+}
+.features-grid {
+  max-width: 1100px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 560px) {
+  .features-grid { grid-template-columns: 1fr; }
+}
+.feat-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 28px 28px 32px;
+  box-shadow: var(--shadow-card);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.feat-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+.feat-icon.lime   { background: var(--acid-green); }
+.feat-icon.indigo { background: var(--deep-indigo); }
+.feat-icon.purple { background: var(--vibrant-lavender); }
+.feat-icon.orange { background: var(--electric-orange); }
+.feat-card h3 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 17px; color: var(--ink);
+  margin: 0;
+}
+.feat-card p {
+  font-size: 14px; color: var(--muted);
+  line-height: 1.55; margin: 0;
+}
+
 /* utilities */
 .hidden { display: none !important; }
 </style>
@@ -1387,6 +1500,83 @@ button:focus:not(:focus-visible) { outline: none; }
       </div>
     </div>
   </section>
+
+  <!-- Welcome card -->
+  <div class="welcome-wrap">
+    <div class="welcome-card">
+      <h2>Seja muito bem-vindo(a) ao seu espaço digital de aprendizado! 👋</h2>
+      <p>Este é o lugar onde a nossa sala de aula se expande. Aqui, você encontra todo o conteúdo digital que discutimos em nossas aulas presenciais, organizado para que você possa mergulhar ainda mais fundo em cada tema.</p>
+    </div>
+  </div>
+
+  <!-- Como funciona -->
+  <div class="how-wrap">
+    <div class="how-card">
+      <h2>Como funciona?</h2>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-step-num">1</div>
+          <div class="how-step-body">
+            <h4>Sempre tem novidades</h4>
+            <p>A cada aula que tivermos, novos materiais e atividades serão liberados por aqui.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">2</div>
+          <div class="how-step-body">
+            <h4>Aprofunde seus estudos</h4>
+            <p>Use este espaço para revisar o que vimos e descobrir novos detalhes sobre os assuntos que você mais gostou.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">3</div>
+          <div class="how-step-body">
+            <h4>Teste seus conhecimentos</h4>
+            <p>Ao final de cada conteúdo, preparamos um Quiz com 10 perguntas. É o jeito perfeito de ver o que você já dominou!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature grid 2×2 -->
+  <div class="features-wrap">
+    <div class="features-grid">
+
+      <div class="feat-card">
+        <div class="feat-icon lime">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#F54D02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Conteúdo organizado por aulas</h3>
+        <p>Navegue por abas separadas para cada aula, com introdução, estudo bíblico, aplicação, resumo e quiz.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon indigo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#DAFF02"/><path d="M12 6v6l4 2" stroke="#241E46" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Revise quando quiser</h3>
+        <p>Todo o material fica disponível para você revisar após a aula, sem pressa e no seu ritmo.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon purple">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Quiz ao final de cada aula</h3>
+        <p>10 perguntas com gabarito completo para você ver o quanto absorveu do conteúdo.</p>
+      </div>
+
+      <div class="feat-card">
+        <div class="feat-icon orange">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" fill="white"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <h3>Dúvidas? Leve para a aula!</h3>
+        <p>Anote tudo e traga para a próxima aula. O professor está aqui para ajudar.</p>
+      </div>
+
+    </div>
+  </div>
 
   <!-- Tilted lesson cards -->
   <section class="tilted-section">
