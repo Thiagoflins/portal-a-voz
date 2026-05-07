@@ -1374,6 +1374,87 @@ button:focus:not(:focus-visible) { outline: none; }
   line-height: 1.55; margin: 0;
 }
 
+/* ==========================================================================
+   MOBILE & TABLET — correções completas
+   ========================================================================== */
+
+/* 1. Touch targets: elimina delay de 300ms em iOS/Android */
+button, a { touch-action: manipulation; }
+
+/* 2. Tap targets mínimos (44px) */
+.pill {
+  min-height: 40px;
+  display: inline-flex; align-items: center;
+}
+.nav-pill { min-height: 48px; }
+.bb-tab { min-height: 44px; }
+
+/* 3. Hero — tablet (521–768px): hero-inner + tags sem sobreposição */
+@media (min-width: 521px) and (max-width: 768px) {
+  .hero-inner { padding: 36px 24px 52px; }
+  .hero-tags { top: 20px; transform: none; right: 16px; }
+  .float-tag.cream { display: none; }
+}
+
+/* 4. Hero — todos os mobiles e tablets */
+@media (max-width: 768px) {
+  .hero-wrap { padding: 10px 10px 20px; }
+  .hero { border-radius: 20px; }
+}
+
+/* 5. Seções — padding vertical mobile */
+@media (max-width: 768px) {
+  .tilted-section { padding: 44px 16px 40px; }
+  .tilted-section .header-row { margin-bottom: 20px; }
+  .process-section { padding: 44px 16px; }
+  .cta-lavender { padding: 36px 16px; }
+  .welcome-wrap { padding: 0 10px 28px; }
+  .how-wrap { padding: 0 10px 28px; }
+  .features-wrap { padding: 0 10px 36px; }
+}
+
+/* 6. Process card laranja — visual muito alto em mobile */
+@media (max-width: 768px) {
+  .process-card.orange .visual { height: 130px; }
+  .process-card { padding: 20px; }
+}
+
+/* 7. Feature e how cards — padding menor em mobile */
+@media (max-width: 600px) {
+  .feat-card { padding: 20px; gap: 10px; }
+  .how-card { padding: 24px 18px; }
+  .welcome-card { padding: 22px 18px; }
+}
+
+/* 8. Lesson sections — padding e body menores em mobile */
+@media (max-width: 480px) {
+  .lesson-body { padding: 20px 12px 40px; gap: 14px; }
+  .lesson-section { padding: 18px 16px; }
+  .highlight-box { padding: 16px 18px; font-size: 14px; }
+  .quote-card { padding: 18px; font-size: 15px; }
+  .verse-box { padding: 14px 16px; font-size: 14px; }
+  .reason-card { padding: 14px; }
+  .lesson-nav { gap: 8px; }
+}
+
+/* 9. Quiz — layout mobile mais confortável */
+@media (max-width: 480px) {
+  .quiz-wrap { padding: 20px 12px 48px; }
+  .quiz-intro { padding: 28px 20px; }
+  .quiz-question-card { padding: 20px 16px; }
+  .quiz-option { padding: 12px; font-size: 14px; }
+  .quiz-option .letter { width: 30px; height: 30px; font-size: 14px; flex-shrink: 0; }
+  .quiz-score { font-size: clamp(56px, 18vw, 112px); }
+}
+
+/* 10. Telas muito pequenas (320px) */
+@media (max-width: 360px) {
+  .hero-title { font-size: 34px; }
+  .hero-inner { padding: 24px 14px 36px; }
+  .brand-logo { height: 26px; }
+  .site-header-inner { padding: 0 12px; }
+}
+
 /* utilities */
 .hidden { display: none !important; }
 </style>
@@ -1444,7 +1525,7 @@ button:focus:not(:focus-visible) { outline: none; }
        ========================================== -->
   <div class="hero-wrap">
     <div class="hero">
-      <div class="hero-bg" style="background-image: url('/images/banner-atual.jpg');"></div>
+      <div class="hero-bg" style="background-image: url('/images/banner-atual.jpg'); background-position: center 30%;"></div>
       <div class="hero-overlay"></div>
 
       <!-- Stack of category pills (right edge) -->
