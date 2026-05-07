@@ -5,6 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Portal A Voz — Onde o Caráter Ecoa o Propósito</title>
 <meta name="description" content="Portal de estudo bíblico semanal para adolescentes — Série Defesa da Fé." />
+<meta property="og:title" content="Portal A Voz — Onde o Caráter Ecoa o Propósito" />
+<meta property="og:description" content="Estudos bíblicos semanais para adolescentes que querem ouvir, perguntar e descobrir." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="/images/banner-atual.jpg" />
+<meta name="theme-color" content="#241E46" />
 
 <!-- Google Fonts: Bricolage Grotesque (display) + Inter (body) -->
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -39,8 +44,8 @@
   --font-display: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  --header-h: 56px;
-  --tabs-h: 52px;
+  --nav-h: 64px;
+  --aula-strip-h: 44px;
   --bottombar-h: 68px;
 }
 
@@ -53,7 +58,9 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  padding-bottom: var(--bottombar-h); /* room for mobile bottom tab bar */
+}
+@media (max-width: 768px) {
+  body { padding-bottom: var(--bottombar-h); }
 }
 img { max-width: 100%; display: block; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
@@ -62,72 +69,129 @@ h1,h2,h3,h4 { font-family: var(--font-display); font-weight: 800; letter-spacing
 p { margin: 0; }
 
 /* ==========================================================================
-   TOP BAR (sticky)
+   SKIP LINK (acessibilidade)
    ========================================================================== */
-.topbar {
+.skip-link {
+  position: absolute; top: -100%; left: 16px; z-index: 200;
+  background: var(--acid-green); color: var(--deep-indigo);
+  padding: 10px 18px; border-radius: var(--radius-pill);
+  font-weight: 700; font-size: 14px;
+  transition: top .15s ease;
+}
+.skip-link:focus { top: 16px; }
+
+/* ==========================================================================
+   SITE HEADER — única navegação
+   ========================================================================== */
+.site-header {
   position: sticky; top: 0; z-index: 50;
   background: var(--deep-indigo);
-  height: var(--header-h);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 16px;
-  color: var(--soft-cream);
+  border-bottom: 1px solid rgba(253,254,186,0.08);
 }
-.brand { display: flex; align-items: center; gap: 10px; }
+.site-header-inner {
+  height: var(--nav-h);
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 20px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* Brand */
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  background: none; border: none; cursor: pointer;
+  padding: 6px 8px 6px 0; border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+.brand:focus-visible { outline: 2px solid var(--acid-green); outline-offset: 2px; border-radius: var(--radius-sm); }
 .brand-mark {
-  width: 32px; height: 32px;
+  width: 34px; height: 34px;
   display: grid; place-items: center;
   background: var(--acid-green);
-  border-radius: 8px;
+  border-radius: 9px;
   color: var(--deep-indigo);
+  flex-shrink: 0;
 }
 .brand-name {
   font-family: var(--font-display); font-weight: 800;
   font-size: 17px; letter-spacing: -0.01em;
   color: var(--soft-cream);
 }
-.topbar-meta {
-  font-size: 11px; font-weight: 500;
-  color: var(--soft-cream); opacity: 0.7;
-  text-transform: uppercase; letter-spacing: 0.08em;
-}
-@media (max-width: 480px) { .topbar-meta { display: none; } }
 
-/* ==========================================================================
-   MAIN NAV (horizontal scroll on mobile)
-   ========================================================================== */
-.mainnav {
-  position: sticky; top: var(--header-h); z-index: 49;
-  background: var(--deep-indigo);
-  height: var(--tabs-h);
+/* Primary nav tabs (desktop) */
+.primary-nav {
   display: flex; align-items: stretch;
-  overflow-x: auto; overflow-y: hidden;
-  scrollbar-width: none;
-  border-top: 1px solid rgba(253,254,186,0.08);
+  flex: 1;
+  padding: 0 8px;
 }
-.mainnav::-webkit-scrollbar { display: none; }
-.mainnav-tab {
+.primary-tab {
   flex: 0 0 auto;
-  padding: 0 18px;
-  display: flex; align-items: center; gap: 8px;
+  padding: 0 16px;
+  display: flex; align-items: center;
   font-size: 14px; font-weight: 600;
-  color: var(--soft-cream);
+  color: rgba(253,254,186,0.55);
   border-bottom: 2px solid transparent;
   white-space: nowrap;
   transition: color .15s ease, border-color .15s ease;
 }
-.mainnav-tab:hover { color: var(--white); }
-.mainnav-tab.active {
-  color: var(--acid-green);
-  border-bottom-color: var(--acid-green);
+.primary-tab:hover { color: var(--soft-cream); }
+.primary-tab.active { color: var(--acid-green); border-bottom-color: var(--acid-green); }
+.primary-tab:focus-visible { outline: 2px solid var(--acid-green); outline-offset: -4px; }
+
+/* Header CTA */
+.header-cta {
+  flex-shrink: 0;
+  background: var(--electric-orange); color: var(--white);
+  padding: 9px 18px; border-radius: var(--radius-pill);
+  font-size: 13px; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: background .15s ease, transform .1s ease;
 }
-.mainnav-tab.locked { opacity: 0.35; cursor: not-allowed; }
-.mainnav-tab.locked:hover { color: var(--soft-cream); }
+.header-cta:hover { background: #ff5c14; }
+.header-cta:active { transform: scale(0.97); }
+.header-cta:focus-visible { outline: 2px solid var(--acid-green); outline-offset: 2px; }
+
+/* Aula strip — aparece apenas em páginas de aula */
+.aula-strip {
+  background: var(--deep-indigo);
+  border-top: 1px solid rgba(253,254,186,0.08);
+  overflow-x: auto; overflow-y: hidden;
+  scrollbar-width: none;
+  height: var(--aula-strip-h);
+}
+.aula-strip::-webkit-scrollbar { display: none; }
+.aula-strip-inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 0 20px;
+  display: flex; align-items: stretch; height: 100%;
+}
+.aula-tab {
+  flex: 0 0 auto;
+  padding: 0 14px;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 600;
+  color: rgba(253,254,186,0.5);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.aula-tab:hover { color: var(--soft-cream); }
+.aula-tab.active { color: var(--acid-green); border-bottom-color: var(--acid-green); }
+.aula-tab.locked { opacity: 0.3; cursor: not-allowed; }
+.aula-tab.locked:hover { color: rgba(253,254,186,0.5); }
+.aula-tab:focus-visible { outline: 2px solid var(--acid-green); outline-offset: -4px; }
 .lock-pill {
   font-size: 9px; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.06em;
   background: var(--vibrant-lavender);
   color: var(--white);
-  padding: 3px 7px; border-radius: var(--radius-pill);
+  padding: 2px 6px; border-radius: var(--radius-pill);
+}
+
+/* Esconde nav principal em mobile (bottombar assume) */
+@media (max-width: 768px) {
+  .primary-nav { display: none; }
+  .header-cta { display: none; }
+  .aula-strip { display: none; }
 }
 
 /* ==========================================================================
@@ -159,7 +223,7 @@ p { margin: 0; }
   overflow: hidden;
   isolation: isolate;
   min-height: 560px;
-  display: flex; flex-direction: column; justify-content: space-between;
+  display: flex; flex-direction: column; justify-content: flex-end;
   color: var(--soft-cream);
   background: var(--deep-indigo);
 }
@@ -183,49 +247,10 @@ p { margin: 0; }
   background: linear-gradient(180deg, rgba(36,30,70,0.55) 0%, rgba(36,30,70,0.78) 100%);
 }
 
-/* Pill-style nav floating in hero */
-.hero-pill-nav {
-  margin: 18px;
-  background: rgba(253,254,186,0.92);
-  color: var(--deep-indigo);
-  border-radius: var(--radius-pill);
-  padding: 8px 8px 8px 18px;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  backdrop-filter: blur(8px);
-  flex-wrap: wrap;
-}
-.hero-pill-nav .nav-brand {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--font-display); font-weight: 800; font-size: 16px;
-}
-.hero-pill-nav .nav-brand-icon {
-  width: 28px; height: 28px; border-radius: 8px;
-  background: var(--electric-orange); color: var(--white);
-  display: grid; place-items: center;
-}
-.hero-pill-nav-links {
-  display: flex; gap: 4px; align-items: center;
-  font-size: 13px; font-weight: 600;
-}
-.hero-pill-nav-links button {
-  padding: 8px 12px; border-radius: var(--radius-pill);
-  color: var(--deep-indigo);
-}
-.hero-pill-nav-links button.active { background: var(--deep-indigo); color: var(--soft-cream); }
-.hero-pill-nav-links button:hover:not(.active) { background: rgba(36,30,70,0.06); }
-.hero-pill-cta {
-  background: var(--electric-orange); color: var(--white);
-  padding: 10px 16px; border-radius: var(--radius-pill);
-  font-size: 13px; font-weight: 700;
-  display: inline-flex; align-items: center; gap: 6px;
-}
-@media (max-width: 720px) {
-  .hero-pill-nav-links { display: none; }
-}
-
 .hero-inner {
-  padding: 18px 36px 56px;
+  padding: 56px 40px 64px;
   max-width: 720px;
+  margin-top: auto;
   position: relative;
   z-index: 1;
 }
@@ -309,10 +334,11 @@ p { margin: 0; }
   .float-tag { font-size: 11px; padding: 7px 12px; }
 }
 @media (max-width: 520px) {
-  .hero { min-height: 620px; }
-  .hero-inner { padding: 12px 20px 40px; }
-  .hero-tags { top: auto; bottom: 30px; right: 16px; transform: none; }
+  .hero { min-height: 580px; }
+  .hero-inner { padding: 32px 20px 44px; }
+  .hero-tags { top: 20px; bottom: auto; right: 16px; transform: none; }
   .float-tag.cream { display: none; }
+  .float-tag.orange { display: none; }
 }
 
 /* "Quem somos" intro w/ stats */
@@ -786,10 +812,13 @@ p { margin: 0; }
 .subnav {
   background: var(--background);
   border-bottom: 1px solid var(--border);
-  padding: 14px 16px;
+  padding: 10px 16px;
   position: sticky;
-  top: calc(var(--header-h) + var(--tabs-h));
+  top: calc(var(--nav-h) + var(--aula-strip-h));
   z-index: 40;
+}
+@media (max-width: 768px) {
+  .subnav { top: var(--nav-h); }
 }
 .subnav-scroll {
   max-width: 980px; margin: 0 auto;
@@ -1190,15 +1219,18 @@ p { margin: 0; }
 .footer .inner { opacity: 0.45; max-width: 720px; margin: 0 auto; line-height: 1.6; }
 
 /* ==========================================================================
-   BOTTOM TAB BAR (mobile)
+   BOTTOM TAB BAR (apenas mobile)
    ========================================================================== */
 .bottombar {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
   background: var(--deep-indigo);
   height: var(--bottombar-h);
-  display: flex;
+  display: none; /* hidden by default — mobile only */
   border-top: 1px solid rgba(253,254,186,0.08);
   padding-bottom: env(safe-area-inset-bottom);
+}
+@media (max-width: 768px) {
+  .bottombar { display: flex; }
 }
 .bb-tab {
   flex: 1;
@@ -1210,6 +1242,32 @@ p { margin: 0; }
 }
 .bb-tab.active { opacity: 1; color: var(--acid-green); }
 .bb-tab svg { width: 22px; height: 22px; }
+.bb-tab:focus-visible { outline: 2px solid var(--acid-green); outline-offset: -4px; border-radius: 8px; }
+
+/* Tilted cards — remove rotation em mobile */
+@media (max-width: 600px) {
+  .tilted-card:nth-child(1),
+  .tilted-card:nth-child(2),
+  .tilted-card:nth-child(3),
+  .tilted-card:nth-child(4) { transform: none; }
+}
+
+/* Focus visible global */
+:focus-visible {
+  outline: 2px solid var(--acid-green);
+  outline-offset: 2px;
+}
+button:focus:not(:focus-visible) { outline: none; }
+
+/* Prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
 /* utilities */
 .hidden { display: none !important; }
@@ -1217,42 +1275,55 @@ p { margin: 0; }
 </head>
 <body>
 
+<a class="skip-link" href="#main-content">Pular para o conteúdo</a>
+
 <!-- ==========================================================================
-     TOP BAR
+     SITE HEADER — única navegação do site
+     DESKTOP: brand + 4 tabs primários + CTA + aula-strip (em páginas de aula)
+     MOBILE: brand + bottom tab bar (abaixo)
+     UNLOCK AULA: adicionar número em UNLOCKED_AULAS no script + remover
+     class="locked" + span.lock-pill do .aula-tab correspondente abaixo.
      ========================================================================== -->
-<header class="topbar">
-  <div class="brand">
-    <span class="brand-mark" aria-hidden="true">
-      <!-- logo corneta A Voz -->
-      <svg viewBox="0 0 347.52 199.37" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:22px;height:auto;"><path d="M200.89,107.42c-.83-2.09-1.79-3.04-2.77-2.84-1.16.24-2.14,1.68-2.9,4.25-.87,2.95-1.45,7.42-1.68,13.3-.16,3.98-.05,7.95.32,11.85.54,5.76,1.32,10,2.28,12.65.83,2.31,1.81,3.43,2.9,3.29.92-.12,1.77-1.37,2.49-3.72.66-2.14,1.21-5.19,1.6-9.12.7-7.03.65-14.15-.29-21.15-.51-3.77-1.17-6.62-1.93-8.52Z"/><path d="M341.18,30.07c-2.02-9.03-4.29-18.95-10.69-26-2.36-2.6-5.27-3.51-5.27-3.51-1.08-.34-3.64-1.1-6.44.1-2.57,1.09-3.81,3.18-4.2,3.9-.99,3.4-2.94,8.46-6.93,13.47-4.14,5.2-8.65,8.04-11.9,9.95-16.86,9.9-33.86,14.93-33.86,14.93-16.75,4.96-25.8,7.64-43.91,11.22-24.85,4.92-24.86,3.25-53.57,8.59-27.93,5.19-38.86,8.8-49.28,13.76-8.62,4.1-15.52,8.48-20.56,12.04-1.31.93-2.89,1.42-4.5,1.4-14.13-.18-28.27-.36-42.4-.54-.86-.01-1.69.3-2.33.87-.03.03-.06.06-.1.09-1.06.94-2.42,1.48-3.84,1.5-2.31.04-4.63.08-6.94.12-1.12.02-2.23-.29-3.19-.87-1.56-.94-3.54-1.93-5.92-2.71-2.65-.87-5.06-1.25-7.05-1.39-1.38-.1-2.66-.79-3.48-1.91-.24-.33-.48-.65-.72-.98-.6-.81-1.54-1.29-2.54-1.31-1.96-.04-3.93-.08-5.89-.12-1.4-.03-2.65.85-3.12,2.17C1.3,88.42,0,93.52,0,99.69c-.01,7.65,1.95,13.79,3.64,17.74.53,1.25,1.78,2.03,3.14,1.97,1.61-.08,3.22-.16,4.83-.24.64-.03,1.26-.25,1.77-.63,1.2-.89,2.41-1.79,3.61-2.68.77-.57,1.69-.9,2.64-.93,1.92-.06,4.61-.43,7.5-1.76,1.51-.7,2.75-1.51,3.74-2.28,1.04-.81,2.32-1.22,3.64-1.21,2.49.02,4.99.04,7.48.06,1.29.01,2.53.53,3.44,1.44,0,0,.02.02.03.03.69.69,1.64,1.05,2.62,1,6.13-.32,12.46-.53,18.96-.6,2.5-.03,4.96-.03,7.41-.01.89,0,1.54.84,1.32,1.71-1.02,4.05-2.05,9.46-2.39,15.87-.48,9.27-1.31,25.24,8.68,41.18,1.05,1.67,12.6,19.49,34.84,25.86,5.56,1.59,9.92,1.93,15.22,2.24,13.17.77,32.13,1.38,56.4.49,20.33.47,37.16-.34,49.47-1.27,15.53-1.18,21.27-2.36,27.61-5.27,4.04-1.85,19.49-9.21,26.83-25.96,3.65-8.32,4.01-16.04,4.29-21.96.4-8.37-.62-15.34-1.66-20.2,12.05,2.32,17.01,6.89,19.22,10.93,1.66,3.02,1.94,6.03,5.37,9.37.99.97,5.41,5.27,10.64,4.49,3.09-.46,5.5-2.56,7.81-5.66,6.98-9.38,7.99-21.17,8.39-26.64,2.16-29.15,1.09-58.08-5.32-86.7Z"/><path d="M65.79,84.35c3.11.07,6.16.06,9.52.06,4.55,0,8.79-.07,11.81-.2,1.62-.07,2.05-.46,2.04-1.11-.02-1.76-.75-4.15-.75-7.27,0-2.98,2.37-4.28,5.07-5.81,1.68-.95,2.71-.82,2.9.83.43,3.79-.69,7.51-.57,8.75.02.22.09.37.21.47.49.42,1.69-.25,2.05-.45,2.49-1.36,9.62-4.88,11.07-5.57.2-.1,10.82-5.12,11.7-6.08.38-.41.51-.88.51-.88.02-.09.09-.33.08-.67-.05-1.33-1.29-3.99-1.32-4.05-.69-1.47-.44-1.16-1.03-2.37-.82-1.67-1.75-3.28-2.78-4.84-2.06-3.11-4.48-5.98-7.06-8.67-.48-.5-.97-1-1.47-1.49-.3-.3-.61-.6-.92-.9-2.81-2.69-6.28-6.2-10.13-8.36-3.02-1.69-6.27-2.56-9.62-1.55-3.24.97-5.28,3.18-7.15,5.31-1.81,2.05-2.7,3.77-4.42,7.1-2.14,4.16-3.4,7.53-4.93,11.66-.78,2.11-1.83,5.06-2.97,8.66-1.73,5.22-3.46,10.44-4.95,15.73-.52,1.83,1.98,1.66,3.12,1.69Z"/></svg>
-    </span>
-    <span class="brand-name">Portal A Voz</span>
+<header class="site-header" id="site-header">
+  <div class="site-header-inner">
+    <button class="brand" onclick="goPage('inicio')" aria-label="Portal A Voz — página inicial">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 347.52 199.37" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:22px;height:auto;"><path d="M200.89,107.42c-.83-2.09-1.79-3.04-2.77-2.84-1.16.24-2.14,1.68-2.9,4.25-.87,2.95-1.45,7.42-1.68,13.3-.16,3.98-.05,7.95.32,11.85.54,5.76,1.32,10,2.28,12.65.83,2.31,1.81,3.43,2.9,3.29.92-.12,1.77-1.37,2.49-3.72.66-2.14,1.21-5.19,1.6-9.12.7-7.03.65-14.15-.29-21.15-.51-3.77-1.17-6.62-1.93-8.52Z"/><path d="M341.18,30.07c-2.02-9.03-4.29-18.95-10.69-26-2.36-2.6-5.27-3.51-5.27-3.51-1.08-.34-3.64-1.1-6.44.1-2.57,1.09-3.81,3.18-4.2,3.9-.99,3.4-2.94,8.46-6.93,13.47-4.14,5.2-8.65,8.04-11.9,9.95-16.86,9.9-33.86,14.93-33.86,14.93-16.75,4.96-25.8,7.64-43.91,11.22-24.85,4.92-24.86,3.25-53.57,8.59-27.93,5.19-38.86,8.8-49.28,13.76-8.62,4.1-15.52,8.48-20.56,12.04-1.31.93-2.89,1.42-4.5,1.4-14.13-.18-28.27-.36-42.4-.54-.86-.01-1.69.3-2.33.87-.03.03-.06.06-.1.09-1.06.94-2.42,1.48-3.84,1.5-2.31.04-4.63.08-6.94.12-1.12.02-2.23-.29-3.19-.87-1.56-.94-3.54-1.93-5.92-2.71-2.65-.87-5.06-1.25-7.05-1.39-1.38-.1-2.66-.79-3.48-1.91-.24-.33-.48-.65-.72-.98-.6-.81-1.54-1.29-2.54-1.31-1.96-.04-3.93-.08-5.89-.12-1.4-.03-2.65.85-3.12,2.17C1.3,88.42,0,93.52,0,99.69c-.01,7.65,1.95,13.79,3.64,17.74.53,1.25,1.78,2.03,3.14,1.97,1.61-.08,3.22-.16,4.83-.24.64-.03,1.26-.25,1.77-.63,1.2-.89,2.41-1.79,3.61-2.68.77-.57,1.69-.9,2.64-.93,1.92-.06,4.61-.43,7.5-1.76,1.51-.7,2.75-1.51,3.74-2.28,1.04-.81,2.32-1.22,3.64-1.21,2.49.02,4.99.04,7.48.06,1.29.01,2.53.53,3.44,1.44,0,0,.02.02.03.03.69.69,1.64,1.05,2.62,1,6.13-.32,12.46-.53,18.96-.6,2.5-.03,4.96-.03,7.41-.01.89,0,1.54.84,1.32,1.71-1.02,4.05-2.05,9.46-2.39,15.87-.48,9.27-1.31,25.24,8.68,41.18,1.05,1.67,12.6,19.49,34.84,25.86,5.56,1.59,9.92,1.93,15.22,2.24,13.17.77,32.13,1.38,56.4.49,20.33.47,37.16-.34,49.47-1.27,15.53-1.18,21.27-2.36,27.61-5.27,4.04-1.85,19.49-9.21,26.83-25.96,3.65-8.32,4.01-16.04,4.29-21.96.4-8.37-.62-15.34-1.66-20.2,12.05,2.32,17.01,6.89,19.22,10.93,1.66,3.02,1.94,6.03,5.37,9.37.99.97,5.41,5.27,10.64,4.49,3.09-.46,5.5-2.56,7.81-5.66,6.98-9.38,7.99-21.17,8.39-26.64,2.16-29.15,1.09-58.08-5.32-86.7Z"/><path d="M65.79,84.35c3.11.07,6.16.06,9.52.06,4.55,0,8.79-.07,11.81-.2,1.62-.07,2.05-.46,2.04-1.11-.02-1.76-.75-4.15-.75-7.27,0-2.98,2.37-4.28,5.07-5.81,1.68-.95,2.71-.82,2.9.83.43,3.79-.69,7.51-.57,8.75.02.22.09.37.21.47.49.42,1.69-.25,2.05-.45,2.49-1.36,9.62-4.88,11.07-5.57.2-.1,10.82-5.12,11.7-6.08.38-.41.51-.88.51-.88.02-.09.09-.33.08-.67-.05-1.33-1.29-3.99-1.32-4.05-.69-1.47-.44-1.16-1.03-2.37-.82-1.67-1.75-3.28-2.78-4.84-2.06-3.11-4.48-5.98-7.06-8.67-.48-.5-.97-1-1.47-1.49-.3-.3-.61-.6-.92-.9-2.81-2.69-6.28-6.2-10.13-8.36-3.02-1.69-6.27-2.56-9.62-1.55-3.24.97-5.28,3.18-7.15,5.31-1.81,2.05-2.7,3.77-4.42,7.1-2.14,4.16-3.4,7.53-4.93,11.66-.78,2.11-1.83,5.06-2.97,8.66-1.73,5.22-3.46,10.44-4.95,15.73-.52,1.83,1.98,1.66,3.12,1.69Z"/></svg>
+      </span>
+      <span class="brand-name">Portal A Voz</span>
+    </button>
+
+    <nav class="primary-nav" aria-label="Navegação principal">
+      <button class="primary-tab active" data-page="inicio">Início</button>
+      <button class="primary-tab" data-page="aula" data-aula="1">Aulas</button>
+      <button class="primary-tab" data-page="novidades">Novidades</button>
+      <button class="primary-tab" data-page="progresso">Progresso</button>
+    </nav>
+
+    <button class="header-cta" onclick="goPage('aula', 1)">
+      Começar
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
   </div>
-  <div class="topbar-meta">Adolescentes · Estudo Bíblico</div>
+
+  <!-- Aula strip: visível apenas em páginas de aula (desktop) -->
+  <div class="aula-strip hidden" id="aula-strip" role="navigation" aria-label="Selecionar aula">
+    <div class="aula-strip-inner">
+      <button class="aula-tab" data-aula="1">Aula 1</button>
+      <button class="aula-tab" data-aula="2">Aula 2</button>
+      <button class="aula-tab" data-aula="3">Aula 3</button>
+      <button class="aula-tab locked" data-aula="4">Aula 4 <span class="lock-pill">Em breve</span></button>
+      <button class="aula-tab locked" data-aula="5">Aula 5 <span class="lock-pill">Em breve</span></button>
+      <button class="aula-tab locked" data-aula="6">Aula 6 <span class="lock-pill">Em breve</span></button>
+      <button class="aula-tab locked" data-aula="7">Aula 7 <span class="lock-pill">Em breve</span></button>
+      <button class="aula-tab locked" data-aula="8">Aula 8 <span class="lock-pill">Em breve</span></button>
+      <button class="aula-tab locked" data-aula="9">Aula 9 <span class="lock-pill">Em breve</span></button>
+      <button class="aula-tab locked" data-aula="10">Aula 10 <span class="lock-pill">Em breve</span></button>
+    </div>
+  </div>
 </header>
 
-<!-- ==========================================================================
-     MAIN NAV (desktop tabs / horizontal scroll on mobile)
-     UNLOCK AULA: remove class "locked" + the "Em breve" pill from the
-     corresponding tab to make a lesson available.
-     ========================================================================== -->
-<nav class="mainnav" id="mainnav">
-  <button class="mainnav-tab active" data-page="inicio">Início</button>
-  <button class="mainnav-tab" data-page="aula" data-aula="1">Aula 1</button>
-  <button class="mainnav-tab" data-page="aula" data-aula="2">Aula 2</button>
-  <button class="mainnav-tab" data-page="aula" data-aula="3">Aula 3</button>
-  <button class="mainnav-tab locked" data-page="aula" data-aula="4">Aula 4 <span class="lock-pill">Em breve</span></button>
-  <button class="mainnav-tab locked" data-page="aula" data-aula="5">Aula 5 <span class="lock-pill">Em breve</span></button>
-  <button class="mainnav-tab locked" data-page="aula" data-aula="6">Aula 6 <span class="lock-pill">Em breve</span></button>
-  <button class="mainnav-tab locked" data-page="aula" data-aula="7">Aula 7 <span class="lock-pill">Em breve</span></button>
-  <button class="mainnav-tab locked" data-page="aula" data-aula="8">Aula 8 <span class="lock-pill">Em breve</span></button>
-  <button class="mainnav-tab locked" data-page="aula" data-aula="9">Aula 9 <span class="lock-pill">Em breve</span></button>
-  <button class="mainnav-tab locked" data-page="aula" data-aula="10">Aula 10 <span class="lock-pill">Em breve</span></button>
-  <button class="mainnav-tab" data-page="novidades">Novidades</button>
-  <button class="mainnav-tab" data-page="progresso">Progresso</button>
-</nav>
-
-<main>
+<main id="main-content">
 
 <!-- ==========================================================================
      PAGE 1 — INÍCIO
@@ -1268,26 +1339,6 @@ p { margin: 0; }
     <div class="hero">
       <div class="hero-bg" style="background-image: url('/images/banner-atual.jpg');"></div>
       <div class="hero-overlay"></div>
-
-      <!-- Floating pill nav inside hero -->
-      <div class="hero-pill-nav">
-        <div class="nav-brand">
-          <span class="nav-brand-icon" aria-hidden="true">
-            <svg viewBox="0 0 347.52 199.37" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:14px;height:auto;"><path d="M200.89,107.42c-.83-2.09-1.79-3.04-2.77-2.84-1.16.24-2.14,1.68-2.9,4.25-.87,2.95-1.45,7.42-1.68,13.3-.16,3.98-.05,7.95.32,11.85.54,5.76,1.32,10,2.28,12.65.83,2.31,1.81,3.43,2.9,3.29.92-.12,1.77-1.37,2.49-3.72.66-2.14,1.21-5.19,1.6-9.12.7-7.03.65-14.15-.29-21.15-.51-3.77-1.17-6.62-1.93-8.52Z"/><path d="M341.18,30.07c-2.02-9.03-4.29-18.95-10.69-26-2.36-2.6-5.27-3.51-5.27-3.51-1.08-.34-3.64-1.1-6.44.1-2.57,1.09-3.81,3.18-4.2,3.9-.99,3.4-2.94,8.46-6.93,13.47-4.14,5.2-8.65,8.04-11.9,9.95-16.86,9.9-33.86,14.93-33.86,14.93-16.75,4.96-25.8,7.64-43.91,11.22-24.85,4.92-24.86,3.25-53.57,8.59-27.93,5.19-38.86,8.8-49.28,13.76-8.62,4.1-15.52,8.48-20.56,12.04-1.31.93-2.89,1.42-4.5,1.4-14.13-.18-28.27-.36-42.4-.54-.86-.01-1.69.3-2.33.87-.03.03-.06.06-.1.09-1.06.94-2.42,1.48-3.84,1.5-2.31.04-4.63.08-6.94.12-1.12.02-2.23-.29-3.19-.87-1.56-.94-3.54-1.93-5.92-2.71-2.65-.87-5.06-1.25-7.05-1.39-1.38-.1-2.66-.79-3.48-1.91-.24-.33-.48-.65-.72-.98-.6-.81-1.54-1.29-2.54-1.31-1.96-.04-3.93-.08-5.89-.12-1.4-.03-2.65.85-3.12,2.17C1.3,88.42,0,93.52,0,99.69c-.01,7.65,1.95,13.79,3.64,17.74.53,1.25,1.78,2.03,3.14,1.97,1.61-.08,3.22-.16,4.83-.24.64-.03,1.26-.25,1.77-.63,1.2-.89,2.41-1.79,3.61-2.68.77-.57,1.69-.9,2.64-.93,1.92-.06,4.61-.43,7.5-1.76,1.51-.7,2.75-1.51,3.74-2.28,1.04-.81,2.32-1.22,3.64-1.21,2.49.02,4.99.04,7.48.06,1.29.01,2.53.53,3.44,1.44,0,0,.02.02.03.03.69.69,1.64,1.05,2.62,1,6.13-.32,12.46-.53,18.96-.6,2.5-.03,4.96-.03,7.41-.01.89,0,1.54.84,1.32,1.71-1.02,4.05-2.05,9.46-2.39,15.87-.48,9.27-1.31,25.24,8.68,41.18,1.05,1.67,12.6,19.49,34.84,25.86,5.56,1.59,9.92,1.93,15.22,2.24,13.17.77,32.13,1.38,56.4.49,20.33.47,37.16-.34,49.47-1.27,15.53-1.18,21.27-2.36,27.61-5.27,4.04-1.85,19.49-9.21,26.83-25.96,3.65-8.32,4.01-16.04,4.29-21.96.4-8.37-.62-15.34-1.66-20.2,12.05,2.32,17.01,6.89,19.22,10.93,1.66,3.02,1.94,6.03,5.37,9.37.99.97,5.41,5.27,10.64,4.49,3.09-.46,5.5-2.56,7.81-5.66,6.98-9.38,7.99-21.17,8.39-26.64,2.16-29.15,1.09-58.08-5.32-86.7Z"/><path d="M65.79,84.35c3.11.07,6.16.06,9.52.06,4.55,0,8.79-.07,11.81-.2,1.62-.07,2.05-.46,2.04-1.11-.02-1.76-.75-4.15-.75-7.27,0-2.98,2.37-4.28,5.07-5.81,1.68-.95,2.71-.82,2.9.83.43,3.79-.69,7.51-.57,8.75.02.22.09.37.21.47.49.42,1.69-.25,2.05-.45,2.49-1.36,9.62-4.88,11.07-5.57.2-.1,10.82-5.12,11.7-6.08.38-.41.51-.88.51-.88.02-.09.09-.33.08-.67-.05-1.33-1.29-3.99-1.32-4.05-.69-1.47-.44-1.16-1.03-2.37-.82-1.67-1.75-3.28-2.78-4.84-2.06-3.11-4.48-5.98-7.06-8.67-.48-.5-.97-1-1.47-1.49-.3-.3-.61-.6-.92-.9-2.81-2.69-6.28-6.2-10.13-8.36-3.02-1.69-6.27-2.56-9.62-1.55-3.24.97-5.28,3.18-7.15,5.31-1.81,2.05-2.7,3.77-4.42,7.1-2.14,4.16-3.4,7.53-4.93,11.66-.78,2.11-1.83,5.06-2.97,8.66-1.73,5.22-3.46,10.44-4.95,15.73-.52,1.83,1.98,1.66,3.12,1.69Z"/></svg>
-          </span>
-          A Voz
-        </div>
-        <div class="hero-pill-nav-links">
-          <button class="active" onclick="goPage('inicio')">Início</button>
-          <button onclick="goPage('aula', 1)">Aulas</button>
-          <button onclick="goPage('novidades')">Novidades</button>
-          <button onclick="goPage('progresso')">Progresso</button>
-        </div>
-        <button class="hero-pill-cta" onclick="goPage('aula', 1)">
-          Começar agora
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </button>
-      </div>
 
       <!-- Stack of category pills (right edge) -->
       <div class="hero-tags" aria-hidden="true">
@@ -1992,9 +2043,8 @@ p { margin: 0; }
    ========================================================================== */
 
 /* ---------- ROUTING ---------- */
-const PAGES = ['inicio', 'novidades', 'progresso'];
 const TOTAL_AULAS = 10;
-const UNLOCKED_AULAS = [1, 2, 3]; // <-- update this list to unlock more lessons
+const UNLOCKED_AULAS = [1, 2, 3]; // <-- adicionar número aqui para desbloquear aula
 
 function showPage(pageId) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -2004,19 +2054,26 @@ function showPage(pageId) {
 }
 
 function setActiveTab(pageKey, aulaNum) {
-  // top nav
-  document.querySelectorAll('.mainnav-tab').forEach(t => {
-    const matchesPage = t.dataset.page === pageKey;
-    const matchesAula = !aulaNum || t.dataset.aula == String(aulaNum);
-    t.classList.toggle('active', matchesPage && matchesAula);
+  // primary nav (desktop)
+  document.querySelectorAll('.primary-tab').forEach(t => {
+    const isAulaTab = t.dataset.page === 'aula';
+    const isActive = pageKey === 'aula' ? isAulaTab : t.dataset.page === pageKey;
+    t.classList.toggle('active', isActive);
   });
-  // bottom bar — collapse all "aula" pages under the "Aulas" tab
+  // aula strip (desktop) — mostrar apenas em páginas de aula
+  const strip = document.getElementById('aula-strip');
+  if (strip) {
+    strip.classList.toggle('hidden', pageKey !== 'aula');
+    if (pageKey === 'aula' && aulaNum) {
+      strip.querySelectorAll('.aula-tab').forEach(t => {
+        t.classList.toggle('active', t.dataset.aula == String(aulaNum));
+      });
+    }
+  }
+  // bottom bar (mobile)
   document.querySelectorAll('.bb-tab').forEach(t => {
-    const target = t.dataset.page;
-    let active = false;
-    if (pageKey === 'aula' && target === 'aula') active = true;
-    else if (pageKey === target) active = true;
-    t.classList.toggle('active', active);
+    const isActive = pageKey === 'aula' ? t.dataset.page === 'aula' : t.dataset.page === pageKey;
+    t.classList.toggle('active', isActive);
   });
 }
 
@@ -2034,20 +2091,31 @@ function goPage(pageKey, aulaNum) {
     showPage('page-' + pageKey);
     setActiveTab(pageKey);
   }
-  // refresh dynamic content
   if (pageKey === 'progresso') renderProgress();
 }
 
-document.querySelectorAll('.mainnav-tab, .bb-tab').forEach(btn => {
+// Primary nav (desktop)
+document.querySelectorAll('.primary-tab').forEach(btn => {
   btn.addEventListener('click', () => {
-    const page = btn.dataset.page;
-    const aula = btn.dataset.aula;
+    goPage(btn.dataset.page, btn.dataset.aula);
+  });
+});
+
+// Aula strip (desktop)
+document.querySelectorAll('.aula-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
     if (btn.classList.contains('locked')) {
-      // still navigate to locked-state so user gets feedback
-      goPage('aula', aula || 99);
+      goPage('aula', btn.dataset.aula);
       return;
     }
-    goPage(page, aula);
+    goPage('aula', btn.dataset.aula);
+  });
+});
+
+// Bottom bar (mobile)
+document.querySelectorAll('.bb-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    goPage(btn.dataset.page, btn.dataset.aula);
   });
 });
 
@@ -2225,8 +2293,11 @@ const quizState = {
 };
 
 function startQuiz(aulaNum) {
-  // make sure we're on the right page + the quiz panel is visible
-  goPage('aula', aulaNum);
+  // navegar para a aula apenas se não estiver nela (evita scroll-to-top desnecessário)
+  const currentPage = document.querySelector('.page.active');
+  if (!currentPage || currentPage.id !== 'page-aula-' + aulaNum) {
+    goPage('aula', aulaNum);
+  }
   // switch the subnav to "Quiz"
   const nav = document.querySelector('[data-aula-subnav="' + aulaNum + '"]');
   if (nav) {
