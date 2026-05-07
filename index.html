@@ -1,0 +1,2440 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portal A Voz — Onde o Caráter Ecoa o Propósito</title>
+<meta name="description" content="Portal de estudo bíblico semanal para adolescentes — Série Defesa da Fé." />
+
+<!-- Google Fonts: Bricolage Grotesque (display) + Inter (body) -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+/* ==========================================================================
+   PORTAL A VOZ — design tokens
+   Edit colors here and they cascade everywhere.
+   ========================================================================== */
+:root {
+  --deep-indigo: #241E46;
+  --vibrant-lavender: #685BC7;
+  --electric-orange: #F54D02;
+  --acid-green: #DAFF02;
+  --soft-cream: #FDFEBA;
+  --background: #F5F5F5;
+  --white: #FFFFFF;
+  --ink: #1a1730;
+  --muted: #6b6786;
+  --border: #e6e4ef;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 2px 0 rgba(36,30,70,0.04), 0 8px 24px rgba(36,30,70,0.06);
+  --shadow-elevate: 0 4px 0 rgba(36,30,70,0.06), 0 18px 40px rgba(36,30,70,0.12);
+
+  --font-display: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --header-h: 56px;
+  --tabs-h: 52px;
+  --bottombar-h: 68px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--background);
+  color: var(--ink);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  padding-bottom: var(--bottombar-h); /* room for mobile bottom tab bar */
+}
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+a { color: inherit; text-decoration: none; }
+h1,h2,h3,h4 { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; margin: 0; }
+p { margin: 0; }
+
+/* ==========================================================================
+   TOP BAR (sticky)
+   ========================================================================== */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--deep-indigo);
+  height: var(--header-h);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+  color: var(--soft-cream);
+}
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark {
+  width: 32px; height: 32px;
+  display: grid; place-items: center;
+  background: var(--acid-green);
+  border-radius: 8px;
+  color: var(--deep-indigo);
+}
+.brand-name {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 17px; letter-spacing: -0.01em;
+  color: var(--soft-cream);
+}
+.topbar-meta {
+  font-size: 11px; font-weight: 500;
+  color: var(--soft-cream); opacity: 0.7;
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+@media (max-width: 480px) { .topbar-meta { display: none; } }
+
+/* ==========================================================================
+   MAIN NAV (horizontal scroll on mobile)
+   ========================================================================== */
+.mainnav {
+  position: sticky; top: var(--header-h); z-index: 49;
+  background: var(--deep-indigo);
+  height: var(--tabs-h);
+  display: flex; align-items: stretch;
+  overflow-x: auto; overflow-y: hidden;
+  scrollbar-width: none;
+  border-top: 1px solid rgba(253,254,186,0.08);
+}
+.mainnav::-webkit-scrollbar { display: none; }
+.mainnav-tab {
+  flex: 0 0 auto;
+  padding: 0 18px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 600;
+  color: var(--soft-cream);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.mainnav-tab:hover { color: var(--white); }
+.mainnav-tab.active {
+  color: var(--acid-green);
+  border-bottom-color: var(--acid-green);
+}
+.mainnav-tab.locked { opacity: 0.35; cursor: not-allowed; }
+.mainnav-tab.locked:hover { color: var(--soft-cream); }
+.lock-pill {
+  font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  background: var(--vibrant-lavender);
+  color: var(--white);
+  padding: 3px 7px; border-radius: var(--radius-pill);
+}
+
+/* ==========================================================================
+   PAGES (only the active page renders)
+   ========================================================================== */
+.page { display: none; }
+.page.active { display: block; }
+
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ==========================================================================
+   PAGE 1 — INÍCIO  (editorial style)
+   ========================================================================== */
+
+/* Outer hero wrap — light background with rounded photo card inside */
+.hero-wrap {
+  background: var(--background);
+  padding: 16px 16px 32px;
+}
+.hero {
+  position: relative;
+  max-width: 1180px;
+  margin: 0 auto;
+  border-radius: 28px;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 560px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  color: var(--soft-cream);
+  background: var(--deep-indigo);
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: -2;
+  background-size: cover; background-position: center;
+}
+.hero-bg::after {
+  /* placeholder visual quando não há imagem de banner */
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 70% 40%, rgba(218,255,2,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse at 20% 80%, rgba(104,91,199,0.18) 0%, transparent 50%),
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 18px, transparent 18px 36px),
+    linear-gradient(160deg, #2e2560 0%, #1a1438 55%, #0f0d22 100%);
+  z-index: -1;
+}
+.hero-overlay {
+  position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgba(36,30,70,0.55) 0%, rgba(36,30,70,0.78) 100%);
+}
+
+/* Pill-style nav floating in hero */
+.hero-pill-nav {
+  margin: 18px;
+  background: rgba(253,254,186,0.92);
+  color: var(--deep-indigo);
+  border-radius: var(--radius-pill);
+  padding: 8px 8px 8px 18px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  backdrop-filter: blur(8px);
+  flex-wrap: wrap;
+}
+.hero-pill-nav .nav-brand {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-weight: 800; font-size: 16px;
+}
+.hero-pill-nav .nav-brand-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--electric-orange); color: var(--white);
+  display: grid; place-items: center;
+}
+.hero-pill-nav-links {
+  display: flex; gap: 4px; align-items: center;
+  font-size: 13px; font-weight: 600;
+}
+.hero-pill-nav-links button {
+  padding: 8px 12px; border-radius: var(--radius-pill);
+  color: var(--deep-indigo);
+}
+.hero-pill-nav-links button.active { background: var(--deep-indigo); color: var(--soft-cream); }
+.hero-pill-nav-links button:hover:not(.active) { background: rgba(36,30,70,0.06); }
+.hero-pill-cta {
+  background: var(--electric-orange); color: var(--white);
+  padding: 10px 16px; border-radius: var(--radius-pill);
+  font-size: 13px; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+@media (max-width: 720px) {
+  .hero-pill-nav-links { display: none; }
+}
+
+.hero-inner {
+  padding: 18px 36px 56px;
+  max-width: 720px;
+  position: relative;
+  z-index: 1;
+}
+.hero-eyebrow-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(253,254,186,0.14);
+  border: 1px solid rgba(253,254,186,0.28);
+  color: var(--soft-cream);
+  padding: 6px 6px 6px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 12px; font-weight: 600;
+  backdrop-filter: blur(6px);
+}
+.hero-eyebrow-pill .new-tag {
+  background: var(--acid-green); color: var(--deep-indigo);
+  font-weight: 800; font-size: 10px;
+  padding: 3px 8px; border-radius: var(--radius-pill);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.hero-title {
+  font-size: clamp(40px, 8.5vw, 84px);
+  color: var(--soft-cream);
+  margin: 22px 0 18px;
+  max-width: 14ch;
+  text-wrap: balance;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+}
+.hero-sub {
+  font-size: 16px; max-width: 38ch;
+  color: var(--soft-cream); opacity: 0.85;
+  margin-bottom: 28px;
+}
+.hero-cta { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 22px;
+  font-size: 14px; font-weight: 700;
+  border-radius: var(--radius-pill);
+  transition: transform .12s ease, background .15s ease, color .15s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn-orange { background: var(--electric-orange); color: var(--white); }
+.btn-orange:hover { background: #ff5c14; }
+.btn-cream-pill {
+  background: var(--soft-cream); color: var(--deep-indigo);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn-cream-pill .play-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--electric-orange); color: var(--white);
+  display: grid; place-items: center;
+}
+.btn-outline-cream {
+  border: 1.5px solid var(--soft-cream);
+  color: var(--soft-cream);
+}
+.btn-outline-cream:hover { background: var(--soft-cream); color: var(--deep-indigo); }
+
+/* Stack of category pills at right edge of hero (like reference) */
+.hero-tags {
+  position: absolute;
+  right: 36px; top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 12px; align-items: flex-end;
+  pointer-events: none;
+  z-index: 2;
+}
+.float-tag {
+  font-size: 13px; font-weight: 700;
+  padding: 9px 16px; border-radius: var(--radius-pill);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+  white-space: nowrap;
+}
+.float-tag.green  { background: var(--acid-green);       color: var(--deep-indigo); transform: rotate(-3deg); }
+.float-tag.lav    { background: var(--vibrant-lavender); color: var(--white);       transform: rotate(2deg); }
+.float-tag.orange { background: var(--electric-orange);  color: var(--white);       transform: rotate(-2deg); }
+.float-tag.cream  { background: var(--soft-cream);       color: var(--deep-indigo); transform: rotate(3deg); }
+@media (max-width: 820px) {
+  .hero-tags { right: 18px; gap: 8px; }
+  .float-tag { font-size: 11px; padding: 7px 12px; }
+}
+@media (max-width: 520px) {
+  .hero { min-height: 620px; }
+  .hero-inner { padding: 12px 20px 40px; }
+  .hero-tags { top: auto; bottom: 30px; right: 16px; transform: none; }
+  .float-tag.cream { display: none; }
+}
+
+/* "Quem somos" intro w/ stats */
+.who-section {
+  padding: 80px 16px 56px;
+  background: var(--background);
+  text-align: center;
+}
+.who-eyebrow-pill {
+  display: inline-block;
+  background: rgba(245,77,2,0.12);
+  color: var(--electric-orange);
+  font-size: 12px; font-weight: 700;
+  padding: 6px 14px; border-radius: var(--radius-pill);
+  text-transform: capitalize;
+  margin-bottom: 22px;
+}
+.who-text {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(22px, 3.4vw, 34px);
+  color: var(--ink);
+  max-width: 22ch;
+  margin: 0 auto 48px;
+  text-wrap: balance;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.stats-row {
+  display: grid; gap: 14px;
+  grid-template-columns: 1fr;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: end;
+}
+@media (min-width: 760px) {
+  .stats-row { grid-template-columns: 1fr 1.1fr 1fr; align-items: end; }
+}
+.stat-card {
+  background: var(--soft-cream);
+  border-radius: 24px;
+  padding: 40px 24px;
+  text-align: center;
+}
+.stat-card .num {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(48px, 7vw, 72px);
+  color: var(--ink);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.stat-card .lbl {
+  font-size: 14px; font-weight: 600;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.stat-card .desc {
+  font-size: 13px; color: var(--muted);
+  margin-top: 18px;
+  max-width: 28ch;
+  margin-left: auto; margin-right: auto;
+}
+.stat-card.featured {
+  background: var(--electric-orange);
+  color: var(--white);
+  padding: 56px 28px;
+  border-radius: 28px;
+  box-shadow: var(--shadow-elevate);
+  position: relative;
+}
+.stat-card.featured .num { color: var(--white); font-size: clamp(60px, 9vw, 96px); }
+.stat-card.featured .lbl { color: var(--white); opacity: 0.9; }
+.stat-card.featured .desc { color: var(--white); opacity: 0.9; }
+
+/* "New Aulas Everyday" — tilted lesson cards */
+.tilted-section {
+  padding: 80px 16px;
+  background: var(--white);
+  overflow: hidden;
+}
+.tilted-section .header-row {
+  max-width: 1180px; margin: 0 auto 36px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+@media (min-width: 760px) {
+  .tilted-section .header-row { flex-direction: row; justify-content: space-between; align-items: end; }
+}
+.tilted-eyebrow-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(28px, 4.5vw, 44px);
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.tilted-eyebrow-title .accent { color: var(--electric-orange); }
+.tilted-section .desc {
+  font-size: 14px; color: var(--muted);
+  max-width: 36ch;
+}
+.tilted-cards {
+  max-width: 1180px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 22px;
+  padding-top: 18px;
+}
+.tilted-card {
+  background: var(--white);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 4px 0 rgba(36,30,70,0.04), 0 18px 40px rgba(36,30,70,0.10);
+  position: relative;
+  transition: transform .25s cubic-bezier(.4,0,.2,1);
+  border: 1px solid var(--border);
+}
+.tilted-card:nth-child(1) { transform: rotate(-3deg); }
+.tilted-card:nth-child(2) { transform: rotate(2deg) translateY(-8px); }
+.tilted-card:nth-child(3) { transform: rotate(-1deg); }
+.tilted-card:nth-child(4) { transform: rotate(3deg) translateY(-4px); }
+.tilted-card:hover { transform: rotate(0) translateY(-6px); z-index: 2; }
+.tilted-card .bookmark {
+  position: absolute; top: 14px; right: 16px;
+  color: var(--ink); opacity: 0.5;
+}
+.tilted-card .logo {
+  width: 42px; height: 42px; border-radius: 12px;
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+.tilted-card .logo.lav    { background: var(--vibrant-lavender); color: var(--white); }
+.tilted-card .logo.green  { background: var(--acid-green);       color: var(--deep-indigo); }
+.tilted-card .logo.orange { background: var(--electric-orange);  color: var(--white); }
+.tilted-card .logo.indigo { background: var(--deep-indigo);      color: var(--soft-cream); }
+.tilted-card h3 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 18px;
+  color: var(--ink);
+  margin-bottom: 10px;
+  line-height: 1.1;
+}
+.tilted-card .meta-pills {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 14px;
+}
+.tilted-card .meta-pills span {
+  font-size: 10px; font-weight: 700;
+  padding: 4px 9px; border-radius: var(--radius-pill);
+  background: rgba(36,30,70,0.06);
+  color: var(--ink);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.tilted-card .desc {
+  font-size: 12px; color: var(--muted);
+  margin-bottom: 14px;
+  line-height: 1.45;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.tilted-card .footer-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+.tilted-card .price {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 14px; color: var(--ink);
+}
+.tilted-card .loc {
+  font-size: 11px; color: var(--muted);
+  display: inline-flex; align-items: center; gap: 4px;
+}
+
+/* Process cards (Effortless process inspired) */
+.process-section {
+  padding: 80px 16px;
+  background: var(--background);
+}
+.process-section .header-block {
+  max-width: 1180px; margin: 0 auto 32px;
+  text-align: center;
+}
+.process-section .head-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(28px, 4.5vw, 44px);
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.process-section .head-title .light { color: var(--vibrant-lavender); }
+.process-section .head-desc {
+  margin-top: 14px;
+  color: var(--muted); font-size: 14px;
+  max-width: 50ch; margin-left: auto; margin-right: auto;
+}
+.process-grid {
+  max-width: 1180px; margin: 0 auto;
+  display: grid; gap: 18px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) { .process-grid { grid-template-columns: 1.1fr 1fr; } }
+.process-card {
+  background: var(--soft-cream);
+  border-radius: 22px;
+  padding: 28px;
+}
+.process-card .checklist { display: grid; gap: 10px; margin-bottom: 18px; }
+.process-card .check-row {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 12px;
+}
+.process-card .doc-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(104,91,199,0.14); color: var(--vibrant-lavender);
+  display: grid; place-items: center; flex-shrink: 0;
+}
+.process-card .check-row .info { flex: 1; min-width: 0; }
+.process-card .check-row .t { font-weight: 700; font-size: 13px; color: var(--ink); }
+.process-card .check-row .s { font-size: 11px; color: var(--muted); }
+.process-card .check-icon {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--acid-green); color: var(--deep-indigo);
+  display: grid; place-items: center;
+}
+.process-card h3 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 22px; color: var(--ink);
+  margin-bottom: 8px;
+}
+.process-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.process-card.orange {
+  background: var(--electric-orange); color: var(--white);
+  padding: 28px;
+}
+.process-card.orange h3 { color: var(--white); }
+.process-card.orange p { color: var(--white); opacity: 0.9; }
+.process-card.orange .visual {
+  height: 220px; background:
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.18) 0%, transparent 70%);
+  border-radius: 18px;
+  margin-bottom: 20px;
+  display: grid; place-items: center;
+  position: relative;
+}
+.process-card.orange .visual .ring {
+  width: 110px; height: 110px; border-radius: 50%;
+  background: var(--white); color: var(--electric-orange);
+  display: grid; place-items: center;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+}
+
+/* Original "Como funciona" kept for fallback compatibility */
+.section-indigo {
+  background: var(--deep-indigo);
+  color: var(--soft-cream);
+  padding: 72px 16px;
+}
+.section-eyebrow {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--acid-green);
+}
+.section-title {
+  font-size: clamp(28px, 5vw, 42px);
+  color: var(--soft-cream);
+  margin: 10px 0 28px;
+  text-wrap: balance;
+}
+.steps {
+  display: grid; gap: 16px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 720px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+.step {
+  background: rgba(253,254,186,0.06);
+  border: 1px solid rgba(253,254,186,0.12);
+  border-radius: var(--radius-md);
+  padding: 22px;
+}
+.step-num {
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  background: var(--acid-green); color: var(--deep-indigo);
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 18px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+}
+.step h3 { font-size: 20px; color: var(--soft-cream); margin-bottom: 6px; }
+.step p { font-size: 14px; color: var(--soft-cream); opacity: 0.78; }
+
+/* Feature cards */
+.section-light {
+  padding: 56px 16px;
+  background: var(--background);
+}
+.section-title-dark { color: var(--ink); }
+.feature-grid {
+  display: grid; gap: 14px;
+  grid-template-columns: repeat(2, 1fr);
+}
+.feature-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-card);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.feature-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: grid; place-items: center;
+  color: var(--deep-indigo);
+}
+.feature-icon.green  { background: var(--acid-green); }
+.feature-icon.indigo { background: var(--deep-indigo); color: var(--acid-green); }
+.feature-icon.lav    { background: var(--vibrant-lavender); color: var(--white); }
+.feature-icon.orange { background: var(--electric-orange); color: var(--white); }
+.feature-card h3 { font-size: 17px; color: var(--ink); }
+.feature-card p { font-size: 13px; color: var(--muted); line-height: 1.45; }
+
+/* Doubt CTA */
+.cta-lavender {
+  background: var(--vibrant-lavender);
+  color: var(--white);
+  padding: 48px 16px;
+}
+.cta-lavender h2 { font-size: clamp(26px, 4vw, 36px); color: var(--white); margin-bottom: 18px; }
+.cta-list { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 10px; }
+.cta-list li {
+  display: flex; gap: 12px; align-items: flex-start;
+  font-size: 15px;
+}
+.cta-list li::before {
+  content: ""; flex-shrink: 0;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--acid-green);
+  margin-top: 8px;
+}
+.cta-close {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 18px; color: var(--soft-cream);
+  text-wrap: balance;
+}
+
+/* ==========================================================================
+   PAGE 2 — NOVIDADES
+   ========================================================================== */
+.page-header {
+  padding: 32px 16px 16px;
+  max-width: 980px; margin: 0 auto;
+}
+.page-eyebrow {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--vibrant-lavender);
+}
+.page-title {
+  font-size: clamp(30px, 6vw, 48px);
+  color: var(--ink);
+  margin: 8px 0 0;
+}
+.feed { padding: 12px 16px 56px; max-width: 980px; margin: 0 auto; display: grid; gap: 14px; }
+
+.pinned-card {
+  background: var(--deep-indigo);
+  color: var(--soft-cream);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.pinned-card .new-badge {
+  align-self: flex-start;
+  background: var(--acid-green); color: var(--deep-indigo);
+  font-size: 11px; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 10px; border-radius: var(--radius-pill);
+}
+.pinned-card h3 {
+  font-size: clamp(22px, 3.5vw, 30px);
+  color: var(--soft-cream);
+}
+.pinned-card p { color: var(--soft-cream); opacity: 0.82; font-size: 14px; }
+.arrow-btn {
+  align-self: flex-start;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  background: var(--electric-orange); color: var(--white);
+  border-radius: 50%;
+  margin-top: 4px;
+  transition: transform .15s ease;
+}
+.arrow-btn:hover { transform: translateX(4px); }
+
+.news-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 22px;
+  box-shadow: var(--shadow-card);
+  display: flex; flex-direction: column; gap: 10px;
+  position: relative;
+}
+.news-card.recent { border-left: 3px solid var(--acid-green); }
+.week-badge {
+  align-self: flex-start;
+  background: var(--vibrant-lavender); color: var(--white);
+  font-size: 11px; font-weight: 700;
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.news-card h3 { font-size: 22px; color: var(--ink); }
+.news-card .desc {
+  font-size: 14px; color: var(--muted);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.news-card .meta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 4px;
+  font-size: 12px; color: var(--muted);
+}
+.news-card .read-more {
+  color: var(--electric-orange); font-weight: 700; font-size: 13px;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+
+/* ==========================================================================
+   PAGE 3 — AULAS
+   ========================================================================== */
+.lesson-header {
+  background: var(--deep-indigo);
+  color: var(--soft-cream);
+  padding: 36px 16px 32px;
+}
+.lesson-header-inner {
+  max-width: 980px; margin: 0 auto;
+  display: grid; gap: 20px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 820px) {
+  .lesson-header-inner { grid-template-columns: 1.4fr 1fr; align-items: end; }
+}
+.lesson-eyebrow {
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--acid-green);
+  display: inline-block;
+}
+.lesson-title {
+  font-size: clamp(32px, 6vw, 56px);
+  color: var(--soft-cream);
+  margin-top: 12px;
+  text-wrap: balance;
+}
+.verse-inset {
+  background: rgba(253,254,186,0.10);
+  border-left: 3px solid var(--acid-green);
+  border-radius: 8px;
+  padding: 16px 18px;
+  font-size: 14px; line-height: 1.55;
+  color: var(--soft-cream);
+  font-style: italic;
+}
+.verse-inset strong { font-style: normal; display: block; margin-top: 6px; opacity: 0.7; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Sub-nav pills */
+.subnav {
+  background: var(--background);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 16px;
+  position: sticky;
+  top: calc(var(--header-h) + var(--tabs-h));
+  z-index: 40;
+}
+.subnav-scroll {
+  max-width: 980px; margin: 0 auto;
+  display: flex; gap: 8px;
+  overflow-x: auto; scrollbar-width: none;
+}
+.subnav-scroll::-webkit-scrollbar { display: none; }
+.pill {
+  flex: 0 0 auto;
+  padding: 8px 14px;
+  font-size: 13px; font-weight: 600;
+  background: var(--white);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  transition: all .15s ease;
+}
+.pill:hover { border-color: var(--vibrant-lavender); }
+.pill.active {
+  background: var(--deep-indigo);
+  color: var(--acid-green);
+  border-color: var(--deep-indigo);
+}
+
+/* Lesson body */
+.lesson-body {
+  max-width: 980px; margin: 0 auto;
+  padding: 32px 16px 48px;
+  display: grid; gap: 18px;
+}
+.lesson-section {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 26px;
+  box-shadow: var(--shadow-card);
+}
+.lesson-section h2 {
+  font-size: clamp(22px, 4vw, 30px);
+  margin-bottom: 14px;
+  color: var(--ink);
+}
+.lesson-section p { font-size: 15px; line-height: 1.65; color: var(--ink); margin-bottom: 12px; }
+.lesson-section p:last-child { margin-bottom: 0; }
+
+/* Block types */
+.highlight-box {
+  background: var(--deep-indigo);
+  color: var(--soft-cream);
+  padding: 22px 24px;
+  border-radius: var(--radius-md);
+  margin: 16px 0;
+  font-size: 15px; line-height: 1.6;
+}
+.highlight-box b, .highlight-box strong { color: var(--acid-green); font-weight: 700; }
+
+.verse-box {
+  background: var(--soft-cream);
+  border-left: 4px solid var(--electric-orange);
+  padding: 18px 22px;
+  border-radius: 8px;
+  margin: 16px 0;
+  font-style: italic;
+  font-size: 15px; line-height: 1.6;
+  color: var(--ink);
+}
+.verse-box .ref { display: block; margin-top: 8px; font-style: normal; font-weight: 700; font-size: 12px; color: var(--electric-orange); text-transform: uppercase; letter-spacing: 0.08em; }
+
+.quote-card {
+  background: var(--vibrant-lavender);
+  color: var(--white);
+  padding: 24px;
+  border-radius: var(--radius-md);
+  margin: 16px 0;
+  font-size: 16px; line-height: 1.55;
+  font-family: var(--font-display); font-weight: 700;
+}
+.quote-card .author {
+  display: block; margin-top: 12px;
+  font-family: var(--font-body); font-weight: 500; font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  opacity: 0.78;
+}
+
+.reasons {
+  display: grid; gap: 14px;
+  grid-template-columns: 1fr;
+  margin: 16px 0;
+}
+@media (min-width: 720px) { .reasons { grid-template-columns: repeat(3, 1fr); } }
+.reason-card {
+  background: var(--soft-cream);
+  border-top: 4px solid var(--acid-green);
+  padding: 18px;
+  border-radius: var(--radius-sm);
+}
+.reason-card.r2 { border-top-color: var(--electric-orange); }
+.reason-card.r3 { border-top-color: var(--vibrant-lavender); }
+.reason-card .num {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 28px; color: var(--deep-indigo);
+}
+.reason-card h4 { font-size: 16px; margin: 4px 0 6px; color: var(--ink); }
+.reason-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+.contrast-grid {
+  display: grid; gap: 12px; grid-template-columns: 1fr;
+  margin: 16px 0;
+}
+@media (min-width: 640px) { .contrast-grid { grid-template-columns: 1fr 1fr; } }
+.contrast-col {
+  padding: 18px; border-radius: var(--radius-sm);
+}
+.contrast-col.world { background: #f0eef7; border: 1px solid var(--border); }
+.contrast-col.bible { background: var(--deep-indigo); color: var(--soft-cream); }
+.contrast-col h4 {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+.contrast-col.world h4 { color: var(--muted); }
+.contrast-col.bible h4 { color: var(--acid-green); }
+.contrast-col ul { padding-left: 18px; margin: 0; font-size: 14px; line-height: 1.6; }
+
+/* Prev/Next */
+.lesson-nav {
+  display: flex; justify-content: space-between; gap: 10px;
+  padding: 16px 0 0;
+}
+.nav-pill {
+  background: var(--electric-orange); color: var(--white);
+  padding: 12px 18px; border-radius: var(--radius-pill);
+  font-weight: 700; font-size: 13px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.nav-pill:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Locked lesson view */
+.locked-state {
+  max-width: 720px; margin: 60px auto;
+  text-align: center;
+  padding: 56px 24px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+.locked-state .lock-icon {
+  width: 72px; height: 72px;
+  background: var(--vibrant-lavender);
+  color: var(--white);
+  border-radius: 50%;
+  display: grid; place-items: center;
+  margin: 0 auto 20px;
+}
+.locked-state h2 { font-size: 30px; margin-bottom: 10px; color: var(--ink); }
+.locked-state p { color: var(--muted); margin-bottom: 18px; }
+.locked-state .em-breve {
+  display: inline-block;
+  background: var(--acid-green); color: var(--deep-indigo);
+  padding: 8px 16px; border-radius: var(--radius-pill);
+  font-weight: 700; font-size: 13px;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+
+/* ==========================================================================
+   QUIZ
+   ========================================================================== */
+.quiz-wrap { max-width: 720px; margin: 0 auto; padding: 32px 16px 56px; }
+
+.quiz-intro {
+  background: var(--deep-indigo);
+  color: var(--soft-cream);
+  border-radius: var(--radius-lg);
+  padding: 40px 28px;
+  text-align: center;
+}
+.quiz-intro .corneta-big {
+  width: 76px; height: 76px;
+  background: var(--acid-green);
+  color: var(--deep-indigo);
+  border-radius: 50%;
+  display: grid; place-items: center;
+  margin: 0 auto 20px;
+}
+.quiz-intro h2 { color: var(--acid-green); font-size: 32px; margin-bottom: 10px; }
+.quiz-intro p { color: var(--soft-cream); opacity: 0.85; font-size: 15px; margin-bottom: 22px; }
+
+.quiz-progress-bar {
+  background: rgba(36,30,70,0.08);
+  height: 8px; border-radius: var(--radius-pill);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+.quiz-progress-fill {
+  background: var(--acid-green);
+  height: 100%; width: 10%;
+  transition: width .35s cubic-bezier(.4,0,.2,1);
+}
+.quiz-progress-label {
+  font-size: 12px; font-weight: 700;
+  color: var(--vibrant-lavender);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 22px;
+}
+
+.quiz-question-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-card);
+}
+.quiz-question {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(20px, 3vw, 26px);
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 22px;
+  text-wrap: balance;
+}
+.quiz-options { display: grid; gap: 10px; }
+.quiz-option {
+  background: var(--white);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex; align-items: center; gap: 14px;
+  text-align: left;
+  font-size: 15px; line-height: 1.4;
+  color: var(--ink);
+  transition: border-color .15s ease, background .15s ease;
+}
+.quiz-option:hover:not(:disabled) { border-color: var(--vibrant-lavender); }
+.quiz-option .letter {
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--electric-orange); color: var(--white);
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 800; font-size: 16px;
+}
+.quiz-option.correct {
+  border-color: var(--acid-green);
+  background: rgba(218,255,2,0.18);
+}
+.quiz-option.correct .letter { background: var(--acid-green); color: var(--deep-indigo); }
+.quiz-option.wrong {
+  border-color: var(--electric-orange);
+  background: rgba(245,77,2,0.06);
+}
+.quiz-option:disabled { cursor: default; }
+
+.quiz-next {
+  margin-top: 18px;
+  display: flex; justify-content: flex-end;
+}
+.quiz-next-btn {
+  background: var(--electric-orange); color: var(--white);
+  padding: 12px 22px; border-radius: var(--radius-pill);
+  font-weight: 700; font-size: 14px;
+}
+
+/* Results */
+.quiz-results {
+  background: var(--deep-indigo);
+  color: var(--soft-cream);
+  border-radius: var(--radius-lg);
+  padding: 36px 24px;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.quiz-score {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(64px, 14vw, 112px);
+  color: var(--acid-green);
+  line-height: 1;
+}
+.quiz-score-msg { color: var(--soft-cream); opacity: 0.9; margin-top: 10px; font-size: 16px; }
+
+.review-list { display: grid; gap: 12px; margin: 18px 0; }
+.review-item {
+  background: var(--white);
+  border-left: 4px solid var(--acid-green);
+  padding: 16px 18px;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card);
+}
+.review-item.wrong { border-left-color: var(--electric-orange); }
+.review-q { font-weight: 700; font-size: 14px; color: var(--ink); margin-bottom: 6px; }
+.review-a { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+.review-a strong { color: var(--ink); }
+.review-explain { font-size: 13px; color: var(--muted); font-style: italic; margin-top: 6px; }
+
+.retry-btn {
+  background: var(--electric-orange); color: var(--white);
+  padding: 14px 22px; border-radius: var(--radius-pill);
+  font-weight: 700; font-size: 14px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+
+/* ==========================================================================
+   PAGE 5 — PROGRESSO
+   ========================================================================== */
+.progress-header {
+  background: var(--deep-indigo);
+  color: var(--soft-cream);
+  padding: 40px 16px 36px;
+}
+.progress-header-inner { max-width: 980px; margin: 0 auto; }
+.progress-header h1 {
+  font-size: clamp(34px, 6vw, 52px);
+  color: var(--soft-cream);
+  margin-bottom: 18px;
+}
+.stat-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+.stat-pill {
+  background: var(--acid-green); color: var(--deep-indigo);
+  padding: 10px 16px; border-radius: var(--radius-pill);
+  font-weight: 700; font-size: 14px;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+
+.overall-progress { max-width: 980px; margin: 0 auto; padding: 28px 16px 12px; }
+.overall-progress .label {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 8px;
+  font-size: 13px; font-weight: 600; color: var(--muted);
+}
+.overall-progress .label .pct {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 22px; color: var(--deep-indigo);
+}
+.overall-bar {
+  background: #e6e4ef;
+  height: 14px; border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+.overall-fill {
+  background: var(--acid-green);
+  height: 100%; width: 30%;
+  border-radius: var(--radius-pill);
+  transition: width .4s ease;
+}
+
+.lesson-list { max-width: 980px; margin: 0 auto; padding: 16px 16px 28px; display: grid; gap: 10px; }
+.lesson-row {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-card);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.lesson-row .left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.lesson-row .lesson-num {
+  width: 36px; height: 36px; flex-shrink: 0;
+  border-radius: 10px;
+  background: var(--vibrant-lavender); color: var(--white);
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 800; font-size: 14px;
+}
+.lesson-row .lesson-info { min-width: 0; }
+.lesson-row .lesson-info .t { font-weight: 700; font-size: 14px; color: var(--ink); }
+.lesson-row .lesson-info .s { font-size: 12px; color: var(--muted); }
+.lesson-row .right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.check-badge {
+  width: 28px; height: 28px;
+  background: var(--acid-green); color: var(--deep-indigo);
+  border-radius: 50%;
+  display: grid; place-items: center;
+}
+.score-pill {
+  background: var(--vibrant-lavender); color: var(--white);
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  font-size: 12px; font-weight: 700;
+}
+.lesson-row.locked { opacity: 0.55; }
+.lesson-row.locked .lesson-num { background: #c9c5dc; }
+
+.motivational {
+  max-width: 980px; margin: 12px auto 36px;
+  background: var(--vibrant-lavender);
+  color: var(--white);
+  border-radius: var(--radius-md);
+  padding: 28px 22px;
+  font-size: 17px;
+}
+.motivational .hl { color: var(--acid-green); font-weight: 700; }
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.footer {
+  background: var(--deep-indigo);
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--soft-cream);
+  opacity: 1;
+}
+.footer .inner { opacity: 0.45; max-width: 720px; margin: 0 auto; line-height: 1.6; }
+
+/* ==========================================================================
+   BOTTOM TAB BAR (mobile)
+   ========================================================================== */
+.bottombar {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 60;
+  background: var(--deep-indigo);
+  height: var(--bottombar-h);
+  display: flex;
+  border-top: 1px solid rgba(253,254,186,0.08);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.bb-tab {
+  flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px;
+  font-size: 11px; font-weight: 600;
+  color: var(--soft-cream); opacity: 0.45;
+  transition: opacity .15s ease, color .15s ease;
+}
+.bb-tab.active { opacity: 1; color: var(--acid-green); }
+.bb-tab svg { width: 22px; height: 22px; }
+
+/* utilities */
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- ==========================================================================
+     TOP BAR
+     ========================================================================== -->
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">
+      <!-- logo corneta A Voz -->
+      <svg viewBox="0 0 347.52 199.37" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:22px;height:auto;"><path d="M200.89,107.42c-.83-2.09-1.79-3.04-2.77-2.84-1.16.24-2.14,1.68-2.9,4.25-.87,2.95-1.45,7.42-1.68,13.3-.16,3.98-.05,7.95.32,11.85.54,5.76,1.32,10,2.28,12.65.83,2.31,1.81,3.43,2.9,3.29.92-.12,1.77-1.37,2.49-3.72.66-2.14,1.21-5.19,1.6-9.12.7-7.03.65-14.15-.29-21.15-.51-3.77-1.17-6.62-1.93-8.52Z"/><path d="M341.18,30.07c-2.02-9.03-4.29-18.95-10.69-26-2.36-2.6-5.27-3.51-5.27-3.51-1.08-.34-3.64-1.1-6.44.1-2.57,1.09-3.81,3.18-4.2,3.9-.99,3.4-2.94,8.46-6.93,13.47-4.14,5.2-8.65,8.04-11.9,9.95-16.86,9.9-33.86,14.93-33.86,14.93-16.75,4.96-25.8,7.64-43.91,11.22-24.85,4.92-24.86,3.25-53.57,8.59-27.93,5.19-38.86,8.8-49.28,13.76-8.62,4.1-15.52,8.48-20.56,12.04-1.31.93-2.89,1.42-4.5,1.4-14.13-.18-28.27-.36-42.4-.54-.86-.01-1.69.3-2.33.87-.03.03-.06.06-.1.09-1.06.94-2.42,1.48-3.84,1.5-2.31.04-4.63.08-6.94.12-1.12.02-2.23-.29-3.19-.87-1.56-.94-3.54-1.93-5.92-2.71-2.65-.87-5.06-1.25-7.05-1.39-1.38-.1-2.66-.79-3.48-1.91-.24-.33-.48-.65-.72-.98-.6-.81-1.54-1.29-2.54-1.31-1.96-.04-3.93-.08-5.89-.12-1.4-.03-2.65.85-3.12,2.17C1.3,88.42,0,93.52,0,99.69c-.01,7.65,1.95,13.79,3.64,17.74.53,1.25,1.78,2.03,3.14,1.97,1.61-.08,3.22-.16,4.83-.24.64-.03,1.26-.25,1.77-.63,1.2-.89,2.41-1.79,3.61-2.68.77-.57,1.69-.9,2.64-.93,1.92-.06,4.61-.43,7.5-1.76,1.51-.7,2.75-1.51,3.74-2.28,1.04-.81,2.32-1.22,3.64-1.21,2.49.02,4.99.04,7.48.06,1.29.01,2.53.53,3.44,1.44,0,0,.02.02.03.03.69.69,1.64,1.05,2.62,1,6.13-.32,12.46-.53,18.96-.6,2.5-.03,4.96-.03,7.41-.01.89,0,1.54.84,1.32,1.71-1.02,4.05-2.05,9.46-2.39,15.87-.48,9.27-1.31,25.24,8.68,41.18,1.05,1.67,12.6,19.49,34.84,25.86,5.56,1.59,9.92,1.93,15.22,2.24,13.17.77,32.13,1.38,56.4.49,20.33.47,37.16-.34,49.47-1.27,15.53-1.18,21.27-2.36,27.61-5.27,4.04-1.85,19.49-9.21,26.83-25.96,3.65-8.32,4.01-16.04,4.29-21.96.4-8.37-.62-15.34-1.66-20.2,12.05,2.32,17.01,6.89,19.22,10.93,1.66,3.02,1.94,6.03,5.37,9.37.99.97,5.41,5.27,10.64,4.49,3.09-.46,5.5-2.56,7.81-5.66,6.98-9.38,7.99-21.17,8.39-26.64,2.16-29.15,1.09-58.08-5.32-86.7Z"/><path d="M65.79,84.35c3.11.07,6.16.06,9.52.06,4.55,0,8.79-.07,11.81-.2,1.62-.07,2.05-.46,2.04-1.11-.02-1.76-.75-4.15-.75-7.27,0-2.98,2.37-4.28,5.07-5.81,1.68-.95,2.71-.82,2.9.83.43,3.79-.69,7.51-.57,8.75.02.22.09.37.21.47.49.42,1.69-.25,2.05-.45,2.49-1.36,9.62-4.88,11.07-5.57.2-.1,10.82-5.12,11.7-6.08.38-.41.51-.88.51-.88.02-.09.09-.33.08-.67-.05-1.33-1.29-3.99-1.32-4.05-.69-1.47-.44-1.16-1.03-2.37-.82-1.67-1.75-3.28-2.78-4.84-2.06-3.11-4.48-5.98-7.06-8.67-.48-.5-.97-1-1.47-1.49-.3-.3-.61-.6-.92-.9-2.81-2.69-6.28-6.2-10.13-8.36-3.02-1.69-6.27-2.56-9.62-1.55-3.24.97-5.28,3.18-7.15,5.31-1.81,2.05-2.7,3.77-4.42,7.1-2.14,4.16-3.4,7.53-4.93,11.66-.78,2.11-1.83,5.06-2.97,8.66-1.73,5.22-3.46,10.44-4.95,15.73-.52,1.83,1.98,1.66,3.12,1.69Z"/></svg>
+    </span>
+    <span class="brand-name">Portal A Voz</span>
+  </div>
+  <div class="topbar-meta">Adolescentes · Estudo Bíblico</div>
+</header>
+
+<!-- ==========================================================================
+     MAIN NAV (desktop tabs / horizontal scroll on mobile)
+     UNLOCK AULA: remove class "locked" + the "Em breve" pill from the
+     corresponding tab to make a lesson available.
+     ========================================================================== -->
+<nav class="mainnav" id="mainnav">
+  <button class="mainnav-tab active" data-page="inicio">Início</button>
+  <button class="mainnav-tab" data-page="aula" data-aula="1">Aula 1</button>
+  <button class="mainnav-tab" data-page="aula" data-aula="2">Aula 2</button>
+  <button class="mainnav-tab" data-page="aula" data-aula="3">Aula 3</button>
+  <button class="mainnav-tab locked" data-page="aula" data-aula="4">Aula 4 <span class="lock-pill">Em breve</span></button>
+  <button class="mainnav-tab locked" data-page="aula" data-aula="5">Aula 5 <span class="lock-pill">Em breve</span></button>
+  <button class="mainnav-tab locked" data-page="aula" data-aula="6">Aula 6 <span class="lock-pill">Em breve</span></button>
+  <button class="mainnav-tab locked" data-page="aula" data-aula="7">Aula 7 <span class="lock-pill">Em breve</span></button>
+  <button class="mainnav-tab locked" data-page="aula" data-aula="8">Aula 8 <span class="lock-pill">Em breve</span></button>
+  <button class="mainnav-tab locked" data-page="aula" data-aula="9">Aula 9 <span class="lock-pill">Em breve</span></button>
+  <button class="mainnav-tab locked" data-page="aula" data-aula="10">Aula 10 <span class="lock-pill">Em breve</span></button>
+  <button class="mainnav-tab" data-page="novidades">Novidades</button>
+  <button class="mainnav-tab" data-page="progresso">Progresso</button>
+</nav>
+
+<main>
+
+<!-- ==========================================================================
+     PAGE 1 — INÍCIO
+     ========================================================================== -->
+<section class="page active" id="page-inicio">
+
+  <!-- ==========================================
+       WEEKLY UPDATE: Replace banner image below
+       File: /images/banner-atual.jpg
+       Recommended size: 1200x600px
+       ========================================== -->
+  <div class="hero-wrap">
+    <div class="hero">
+      <div class="hero-bg" style="background-image: url('/images/banner-atual.jpg');"></div>
+      <div class="hero-overlay"></div>
+
+      <!-- Floating pill nav inside hero -->
+      <div class="hero-pill-nav">
+        <div class="nav-brand">
+          <span class="nav-brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 347.52 199.37" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:14px;height:auto;"><path d="M200.89,107.42c-.83-2.09-1.79-3.04-2.77-2.84-1.16.24-2.14,1.68-2.9,4.25-.87,2.95-1.45,7.42-1.68,13.3-.16,3.98-.05,7.95.32,11.85.54,5.76,1.32,10,2.28,12.65.83,2.31,1.81,3.43,2.9,3.29.92-.12,1.77-1.37,2.49-3.72.66-2.14,1.21-5.19,1.6-9.12.7-7.03.65-14.15-.29-21.15-.51-3.77-1.17-6.62-1.93-8.52Z"/><path d="M341.18,30.07c-2.02-9.03-4.29-18.95-10.69-26-2.36-2.6-5.27-3.51-5.27-3.51-1.08-.34-3.64-1.1-6.44.1-2.57,1.09-3.81,3.18-4.2,3.9-.99,3.4-2.94,8.46-6.93,13.47-4.14,5.2-8.65,8.04-11.9,9.95-16.86,9.9-33.86,14.93-33.86,14.93-16.75,4.96-25.8,7.64-43.91,11.22-24.85,4.92-24.86,3.25-53.57,8.59-27.93,5.19-38.86,8.8-49.28,13.76-8.62,4.1-15.52,8.48-20.56,12.04-1.31.93-2.89,1.42-4.5,1.4-14.13-.18-28.27-.36-42.4-.54-.86-.01-1.69.3-2.33.87-.03.03-.06.06-.1.09-1.06.94-2.42,1.48-3.84,1.5-2.31.04-4.63.08-6.94.12-1.12.02-2.23-.29-3.19-.87-1.56-.94-3.54-1.93-5.92-2.71-2.65-.87-5.06-1.25-7.05-1.39-1.38-.1-2.66-.79-3.48-1.91-.24-.33-.48-.65-.72-.98-.6-.81-1.54-1.29-2.54-1.31-1.96-.04-3.93-.08-5.89-.12-1.4-.03-2.65.85-3.12,2.17C1.3,88.42,0,93.52,0,99.69c-.01,7.65,1.95,13.79,3.64,17.74.53,1.25,1.78,2.03,3.14,1.97,1.61-.08,3.22-.16,4.83-.24.64-.03,1.26-.25,1.77-.63,1.2-.89,2.41-1.79,3.61-2.68.77-.57,1.69-.9,2.64-.93,1.92-.06,4.61-.43,7.5-1.76,1.51-.7,2.75-1.51,3.74-2.28,1.04-.81,2.32-1.22,3.64-1.21,2.49.02,4.99.04,7.48.06,1.29.01,2.53.53,3.44,1.44,0,0,.02.02.03.03.69.69,1.64,1.05,2.62,1,6.13-.32,12.46-.53,18.96-.6,2.5-.03,4.96-.03,7.41-.01.89,0,1.54.84,1.32,1.71-1.02,4.05-2.05,9.46-2.39,15.87-.48,9.27-1.31,25.24,8.68,41.18,1.05,1.67,12.6,19.49,34.84,25.86,5.56,1.59,9.92,1.93,15.22,2.24,13.17.77,32.13,1.38,56.4.49,20.33.47,37.16-.34,49.47-1.27,15.53-1.18,21.27-2.36,27.61-5.27,4.04-1.85,19.49-9.21,26.83-25.96,3.65-8.32,4.01-16.04,4.29-21.96.4-8.37-.62-15.34-1.66-20.2,12.05,2.32,17.01,6.89,19.22,10.93,1.66,3.02,1.94,6.03,5.37,9.37.99.97,5.41,5.27,10.64,4.49,3.09-.46,5.5-2.56,7.81-5.66,6.98-9.38,7.99-21.17,8.39-26.64,2.16-29.15,1.09-58.08-5.32-86.7Z"/><path d="M65.79,84.35c3.11.07,6.16.06,9.52.06,4.55,0,8.79-.07,11.81-.2,1.62-.07,2.05-.46,2.04-1.11-.02-1.76-.75-4.15-.75-7.27,0-2.98,2.37-4.28,5.07-5.81,1.68-.95,2.71-.82,2.9.83.43,3.79-.69,7.51-.57,8.75.02.22.09.37.21.47.49.42,1.69-.25,2.05-.45,2.49-1.36,9.62-4.88,11.07-5.57.2-.1,10.82-5.12,11.7-6.08.38-.41.51-.88.51-.88.02-.09.09-.33.08-.67-.05-1.33-1.29-3.99-1.32-4.05-.69-1.47-.44-1.16-1.03-2.37-.82-1.67-1.75-3.28-2.78-4.84-2.06-3.11-4.48-5.98-7.06-8.67-.48-.5-.97-1-1.47-1.49-.3-.3-.61-.6-.92-.9-2.81-2.69-6.28-6.2-10.13-8.36-3.02-1.69-6.27-2.56-9.62-1.55-3.24.97-5.28,3.18-7.15,5.31-1.81,2.05-2.7,3.77-4.42,7.1-2.14,4.16-3.4,7.53-4.93,11.66-.78,2.11-1.83,5.06-2.97,8.66-1.73,5.22-3.46,10.44-4.95,15.73-.52,1.83,1.98,1.66,3.12,1.69Z"/></svg>
+          </span>
+          A Voz
+        </div>
+        <div class="hero-pill-nav-links">
+          <button class="active" onclick="goPage('inicio')">Início</button>
+          <button onclick="goPage('aula', 1)">Aulas</button>
+          <button onclick="goPage('novidades')">Novidades</button>
+          <button onclick="goPage('progresso')">Progresso</button>
+        </div>
+        <button class="hero-pill-cta" onclick="goPage('aula', 1)">
+          Começar agora
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+
+      <!-- Stack of category pills (right edge) -->
+      <div class="hero-tags" aria-hidden="true">
+        <span class="float-tag green">Catecismo</span>
+        <span class="float-tag lav">Trindade</span>
+        <span class="float-tag orange">Fé</span>
+        <span class="float-tag cream">Identidade</span>
+      </div>
+
+      <div class="hero-inner">
+        <span class="hero-eyebrow-pill">
+          <span class="new-tag">Novo</span>
+          Série Defesa da Fé · 10 aulas
+        </span>
+        <h1 class="hero-title">Sua curiosidade te leva mais longe.</h1>
+        <p class="hero-sub">Estudos bíblicos semanais para adolescentes que querem ouvir, perguntar e descobrir. Onde o caráter ecoa o propósito.</p>
+        <div class="hero-cta">
+          <button class="btn btn-orange" onclick="goPage('aula', 1)">Começar Aula 1
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <button class="btn btn-cream-pill" onclick="goPage('novidades')">
+            Ver Novidades
+            <span class="play-dot">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quem somos / Stats -->
+  <section class="who-section">
+    <span class="who-eyebrow-pill">Quem somos</span>
+    <p class="who-text">No Portal A Voz, a gente acredita que adolescentes têm perguntas grandes — e merecem respostas inteiras. Nossa missão é apontar com clareza para o Cordeiro de Deus, semana após semana.</p>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="num">10</div>
+        <div class="lbl">Aulas na série</div>
+        <p class="desc">Conteúdo organizado em sequência, liberado a cada semana.</p>
+      </div>
+      <div class="stat-card featured">
+        <div class="num">100<span style="font-size:0.5em;">+</span></div>
+        <div class="lbl">Perguntas no Quiz</div>
+        <p class="desc">10 perguntas por aula pra você testar o que ficou — sem pressão, com leveza.</p>
+      </div>
+      <div class="stat-card">
+        <div class="num">12-17</div>
+        <div class="lbl">Idade-alvo</div>
+        <p class="desc">Linguagem honesta, conteúdo sério, conversa de verdade.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tilted lesson cards -->
+  <section class="tilted-section">
+    <div class="header-row">
+      <h2 class="tilted-eyebrow-title">Aula nova<br/><span class="accent">toda semana</span></h2>
+      <p class="desc">Cada semana, um novo tema. Cada tema, uma pergunta nova pra você levar pra vida.</p>
+    </div>
+    <div class="tilted-cards">
+
+      <div class="tilted-card">
+        <span class="bookmark"><svg width="14" height="18" viewBox="0 0 14 18" fill="currentColor"><path d="M0 0h14v18l-7-5-7 5z"/></svg></span>
+        <div class="logo lav">A1</div>
+        <h3>Qual é o nosso bem maior?</h3>
+        <div class="meta-pills"><span>Aula 1</span><span>Pertencimento</span></div>
+        <p class="desc">Antes de qualquer regra, há uma pergunta de pertencimento: de quem eu sou?</p>
+        <div class="footer-row">
+          <span class="price">10 perguntas</span>
+          <span class="loc">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 8-8z"/></svg>
+            João 14:6
+          </span>
+        </div>
+      </div>
+
+      <div class="tilted-card">
+        <span class="bookmark"><svg width="14" height="18" viewBox="0 0 14 18" fill="currentColor"><path d="M0 0h14v18l-7-5-7 5z"/></svg></span>
+        <div class="logo green">A2</div>
+        <h3>Quem é você diante de Deus?</h3>
+        <div class="meta-pills"><span>Aula 2</span><span>Identidade</span></div>
+        <p class="desc">Identidade não é algo que você inventa — é algo que te é dado. Filho.</p>
+        <div class="footer-row">
+          <span class="price">10 perguntas</span>
+          <span class="loc">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 8-8z"/></svg>
+            1 João 3:1
+          </span>
+        </div>
+      </div>
+
+      <div class="tilted-card">
+        <span class="bookmark"><svg width="14" height="18" viewBox="0 0 14 18" fill="currentColor"><path d="M0 0h14v18l-7-5-7 5z"/></svg></span>
+        <div class="logo orange">A3</div>
+        <h3>Quem é Deus, afinal?</h3>
+        <div class="meta-pills"><span>Aula 3</span><span>Trindade</span></div>
+        <p class="desc">Um Deus, três pessoas. Mistério que se revela em amor — e te alcança hoje.</p>
+        <div class="footer-row">
+          <span class="price">10 perguntas</span>
+          <span class="loc">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 1 8 8c0 5.5-8 12-8 12s-8-6.5-8-12a8 8 0 0 1 8-8z"/></svg>
+            Mt 28:19
+          </span>
+        </div>
+      </div>
+
+      <div class="tilted-card">
+        <span class="bookmark"><svg width="14" height="18" viewBox="0 0 14 18" fill="currentColor" opacity="0.4"><path d="M0 0h14v18l-7-5-7 5z"/></svg></span>
+        <div class="logo indigo">A4</div>
+        <h3>O que a Bíblia é, exatamente?</h3>
+        <div class="meta-pills"><span>Em breve</span><span>Escritura</span></div>
+        <p class="desc">Como um livro tão antigo continua falando coisas tão atuais? Spoiler: não é só livro.</p>
+        <div class="footer-row">
+          <span class="price">10 perguntas</span>
+          <span class="loc">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+            Em breve
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Process / Como funciona -->
+  <section class="process-section">
+    <div class="header-block">
+      <h2 class="head-title">Processo simples<br/><span class="light">resultados que ecoam</span></h2>
+      <p class="head-desc">Três passos por semana — e a Palavra começa a fazer sentido na sua história.</p>
+    </div>
+    <div class="process-grid">
+      <div class="process-card">
+        <div class="checklist">
+          <div class="check-row">
+            <div class="doc-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            </div>
+            <div class="info">
+              <div class="t">Leia a aula da semana</div>
+              <div class="s">Texto curto · 10-15 min</div>
+            </div>
+            <span class="check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>
+          </div>
+          <div class="check-row">
+            <div class="doc-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </div>
+            <div class="info">
+              <div class="t">Marque suas dúvidas</div>
+              <div class="s">No caderno ou no celular</div>
+            </div>
+            <span class="check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>
+          </div>
+          <div class="check-row">
+            <div class="doc-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>
+            </div>
+            <div class="info">
+              <div class="t">Faça o Quiz</div>
+              <div class="s">10 perguntas · sem cronômetro</div>
+            </div>
+            <span class="check-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>
+          </div>
+        </div>
+        <h3>Sua jornada, semana a semana</h3>
+        <p>Cada aula é um passo. Você não precisa correr — só precisa estar aqui, com o caderno aberto e o coração disposto.</p>
+      </div>
+
+      <div class="process-card orange">
+        <div class="visual">
+          <div class="ring">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4l8 3V7L3 10z"/><path d="M11 7l8-3v16l-8-3"/><path d="M19 9c1.5 1 1.5 5 0 6"/></svg>
+          </div>
+        </div>
+        <h3>Ecoe o que você aprende</h3>
+        <p>O que entra, sai. Conta no grupo, conversa com um amigo, leva pra encontro presencial. A voz cresce quando se compartilha.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Doubt CTA -->
+  <section class="cta-lavender">
+    <div class="container">
+      <div class="section-eyebrow" style="color: var(--acid-green);">Ficou com dúvida?</div>
+      <h2>Não engole — anota. Leva. Pergunta.</h2>
+      <ul class="cta-list">
+        <li>Marque o trecho que não fechou.</li>
+        <li>Escreva sua pergunta com suas próprias palavras.</li>
+        <li>Leve pra aula presencial — a gente conversa junto.</li>
+      </ul>
+      <p class="cta-close">A pergunta certa abre a porta da resposta. Não tem dúvida boba.</p>
+    </div>
+  </section>
+</section>
+
+<!-- ==========================================================================
+     PAGE 2 — NOVIDADES
+     ========================================================================== -->
+<section class="page" id="page-novidades">
+  <div class="page-header">
+    <div class="page-eyebrow">Feed semanal</div>
+    <h1 class="page-title">Novidades</h1>
+  </div>
+  <div class="feed">
+
+    <!-- Pinned -->
+    <div class="pinned-card">
+      <span class="new-badge">Novo</span>
+      <h3>Semana 3 no ar: <em style="font-style:normal; color:var(--acid-green);">"Quem é Deus?"</em></h3>
+      <p>A terceira aula da série Defesa da Fé chegou. Trindade, mistério e o convite que muda tudo.</p>
+      <button class="arrow-btn" onclick="goPage('aula', 3)" aria-label="Ir para Aula 3">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+
+    <!-- News card 1 (most recent — green left border) -->
+    <article class="news-card recent">
+      <span class="week-badge">Semana 3</span>
+      <h3>O Quiz da Aula 2 já está disponível</h3>
+      <p class="desc">Teste o que ficou da conversa sobre identidade. 10 perguntas, sem pressa, sem pressão — só um termômetro pra você.</p>
+      <div class="meta">
+        <span>Há 2 dias</span>
+        <a class="read-more" href="#" onclick="event.preventDefault(); goPage('aula', 2)">Ler mais →</a>
+      </div>
+    </article>
+
+    <!-- News card 2 -->
+    <article class="news-card">
+      <span class="week-badge">Semana 2</span>
+      <h3>Encontro extra: noite de perguntas livres</h3>
+      <p class="desc">No próximo sábado, vamos abrir um espaço só pra dúvidas. Traga as suas — escritas no celular, no caderno, do jeito que for.</p>
+      <div class="meta">
+        <span>Há 5 dias</span>
+        <a class="read-more" href="#">Ler mais →</a>
+      </div>
+    </article>
+
+    <!-- News card 3 -->
+    <article class="news-card">
+      <span class="week-badge">Semana 1</span>
+      <h3>Bem-vindo, turma! A série começou.</h3>
+      <p class="desc">A série Defesa da Fé tem 10 aulas. Cada semana, um tema. Cada tema, uma pergunta. E muita conversa de verdade.</p>
+      <div class="meta">
+        <span>Há 12 dias</span>
+        <a class="read-more" href="#" onclick="event.preventDefault(); goPage('aula', 1)">Ler mais →</a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ==========================================================================
+     PAGE 3 — AULAS
+     Each lesson is a separate <section class="page" id="page-aula-N">.
+     ========================================================================== -->
+
+<!-- ==========================================
+     ADD NEW AULA: Copy the block between these
+     comments and update: title, verse, content,
+     quiz questions array, and unlock nav button
+     ========================================== -->
+<!-- ===== AULA 1 ===== -->
+<section class="page" id="page-aula-1" data-aula="1">
+  <div class="lesson-header">
+    <div class="lesson-header-inner">
+      <div>
+        <span class="lesson-eyebrow">✦ Aula 1 — Série Defesa da Fé · Pergunta 1</span>
+        <h1 class="lesson-title">Qual é o nosso único bem maior?</h1>
+      </div>
+      <div class="verse-inset">
+        "Eu sou o caminho, a verdade e a vida; ninguém vem ao Pai senão por mim."
+        <strong>João 14:6</strong>
+      </div>
+    </div>
+  </div>
+
+  <nav class="subnav">
+    <div class="subnav-scroll" data-aula-subnav="1">
+      <button class="pill active" data-section="intro">Introdução</button>
+      <button class="pill" data-section="pertencimento">Pertencimento</button>
+      <button class="pill" data-section="visao">Visão Bíblica</button>
+      <button class="pill" data-section="estudo">Estudo Bíblico</button>
+      <button class="pill" data-section="aplicacao">Aplicação</button>
+      <button class="pill" data-section="resumo">Resumo</button>
+      <button class="pill" data-section="quiz">Quiz</button>
+    </div>
+  </nav>
+
+  <div class="lesson-body">
+    <section class="lesson-section">
+      <h2>Introdução</h2>
+      <p>Todo mundo tem um "bem maior" — uma coisa que, se você perdesse, sentiria que perdeu tudo. Pra uns, é a família. Pra outros, é uma amizade, um sonho, o reconhecimento, o celular novo. A pergunta dessa aula é simples e desconfortável: <strong>qual é o seu?</strong></p>
+      <div class="highlight-box">
+        A vida cristã começa quando você descobre que seu maior bem <b>não está em você</b> — está em alguém que te encontrou primeiro.
+      </div>
+      <p>Antes de qualquer doutrina, antes de qualquer regra, há uma pergunta de pertencimento: <em>de quem eu sou?</em></p>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Pertencimento</h2>
+      <div class="quote-card">
+        Pertencer a Cristo não é virar uma versão melhor de você — é descobrir quem você sempre foi diante dEle.
+        <span class="author">— Reflexão pastoral</span>
+      </div>
+      <p>O Catecismo (na sua leitura clássica) começa afirmando que nosso único conforto, em vida e em morte, é não pertencer a nós mesmos, mas ao nosso fiel Salvador. Isso muda o jogo: você não é o produto que precisa se vender, nem o problema que precisa se resolver. Você é alguém que pertence.</p>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Visão Bíblica</h2>
+      <div class="contrast-grid">
+        <div class="contrast-col world">
+          <h4>Visão do mundo</h4>
+          <ul>
+            <li>Você é o que você produz.</li>
+            <li>Seu valor depende do que postam de você.</li>
+            <li>Liberdade é não pertencer a ninguém.</li>
+          </ul>
+        </div>
+        <div class="contrast-col bible">
+          <h4>Visão bíblica</h4>
+          <ul>
+            <li>Você é amado antes de produzir.</li>
+            <li>Seu valor está em ser feito à imagem de Deus.</li>
+            <li>Liberdade é pertencer a quem te ama de verdade.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Estudo Bíblico</h2>
+      <div class="verse-box">
+        "Pois fostes comprados por preço. Glorificai, pois, a Deus no vosso corpo."
+        <span class="ref">1 Coríntios 6:20</span>
+      </div>
+      <p>Paulo escreve a uma igreja confusa, num contexto de muita pressão cultural — parecido com o nosso. E ele lembra: você foi comprado por preço. Há um dono — e Ele é bom.</p>
+      <div class="reasons">
+        <div class="reason-card r1">
+          <div class="num">01</div>
+          <h4>Comprados</h4>
+          <p>Não somos donos de nós mesmos.</p>
+        </div>
+        <div class="reason-card r2">
+          <div class="num">02</div>
+          <h4>Por preço</h4>
+          <p>O custo foi a vida do próprio Cristo.</p>
+        </div>
+        <div class="reason-card r3">
+          <div class="num">03</div>
+          <h4>Para glorificar</h4>
+          <p>Pertencer é viver com propósito.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Aplicação</h2>
+      <p>Essa semana, escolha <strong>uma área</strong> da sua vida (escola, redes, amizades, casa) e responda no caderno: <em>"Nesta área, quem é o meu dono?"</em>. Sem corrigir a resposta — só notar.</p>
+      <div class="highlight-box">
+        Pertencer a Cristo é a coisa mais <b>libertadora</b> que vai te acontecer. Não é correr atrás de aprovação — é viver de uma aprovação que <b>já é sua</b>.
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Resumo</h2>
+      <p>Nosso maior bem não é o que conquistamos — é a quem pertencemos. Cristo é o nosso bem maior porque Ele nos comprou, nos chama pelo nome e não nos perde. Tudo o mais — escola, redes, planos — encontra seu lugar a partir daí.</p>
+      <button class="btn btn-orange" onclick="startQuiz(1)" style="margin-top: 8px;">Fazer o Quiz da Aula 1
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </section>
+
+    <!-- Quiz panel for this lesson (hidden by default; subnav switches to it) -->
+    <section class="lesson-section" id="aula-1-quiz-panel" style="display:none;">
+      <div id="quiz-mount-1"></div>
+    </section>
+
+    <div class="lesson-nav">
+      <button class="nav-pill" disabled>← Voltar</button>
+      <button class="nav-pill" onclick="goPage('aula', 2)">Avançar →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AULA 2 ===== -->
+<section class="page" id="page-aula-2" data-aula="2">
+  <div class="lesson-header">
+    <div class="lesson-header-inner">
+      <div>
+        <span class="lesson-eyebrow">✦ Aula 2 — Série Defesa da Fé · Pergunta 2</span>
+        <h1 class="lesson-title">Quem é você diante de Deus?</h1>
+      </div>
+      <div class="verse-inset">
+        "Vede que grande amor nos tem concedido o Pai, ao ponto de sermos chamados filhos de Deus; e, de fato, somos."
+        <strong>1 João 3:1</strong>
+      </div>
+    </div>
+  </div>
+
+  <nav class="subnav">
+    <div class="subnav-scroll" data-aula-subnav="2">
+      <button class="pill active" data-section="intro">Introdução</button>
+      <button class="pill" data-section="pertencimento">Pertencimento</button>
+      <button class="pill" data-section="visao">Visão Bíblica</button>
+      <button class="pill" data-section="estudo">Estudo Bíblico</button>
+      <button class="pill" data-section="aplicacao">Aplicação</button>
+      <button class="pill" data-section="resumo">Resumo</button>
+      <button class="pill" data-section="quiz">Quiz</button>
+    </div>
+  </nav>
+
+  <div class="lesson-body">
+    <section class="lesson-section">
+      <h2>Introdução</h2>
+      <p>Identidade é a palavra mais barulhenta da sua geração. Você ouve isso o tempo todo: "seja você mesmo", "se descubra", "se inventa". Mas e se a sua identidade <strong>não fosse algo que você cria do zero</strong>, e sim algo que te é dado?</p>
+      <div class="highlight-box">
+        A identidade cristã começa com uma palavra: <b>filho</b>. Não é título, é vínculo. E vínculo não se perde fácil.
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Pertencimento</h2>
+      <p>Você é imagem de Deus (Gn 1:27). Isso significa três coisas práticas:</p>
+      <div class="reasons">
+        <div class="reason-card r1">
+          <div class="num">01</div>
+          <h4>Valor inegociável</h4>
+          <p>Antes de qualquer mérito.</p>
+        </div>
+        <div class="reason-card r2">
+          <div class="num">02</div>
+          <h4>Vocação</h4>
+          <p>Você foi feito pra refletir Alguém.</p>
+        </div>
+        <div class="reason-card r3">
+          <div class="num">03</div>
+          <h4>Comunidade</h4>
+          <p>A imagem é completa em relação.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Visão Bíblica</h2>
+      <div class="quote-card">
+        Você não precisa se inventar. Você precisa se descobrir — e descobrir-se em Cristo é encontrar o original.
+        <span class="author">— Reflexão pastoral</span>
+      </div>
+      <div class="contrast-grid">
+        <div class="contrast-col world">
+          <h4>Cultura</h4>
+          <ul>
+            <li>Você se define.</li>
+            <li>Sua identidade é fluida.</li>
+            <li>Performance = valor.</li>
+          </ul>
+        </div>
+        <div class="contrast-col bible">
+          <h4>Bíblia</h4>
+          <ul>
+            <li>Você foi definido por Quem te criou.</li>
+            <li>Sua identidade é firmada em Cristo.</li>
+            <li>Filiação = valor.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Estudo Bíblico</h2>
+      <div class="verse-box">
+        "Vede que grande amor nos tem concedido o Pai, ao ponto de sermos chamados filhos de Deus; e, de fato, somos."
+        <span class="ref">1 João 3:1</span>
+      </div>
+      <p>Repare: João não diz "podemos virar filhos se nos esforçarmos". Ele diz "somos". É um <em>fato</em>. A vida cristã é viver à altura do que já é verdade sobre você.</p>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Aplicação</h2>
+      <p>Pegue uma frase que você costuma falar pra si mesmo nos dias ruins ("eu sou um fracasso", "ninguém me suporta", "eu não sirvo"). Substitua por: <strong>"Sou filho(a) de Deus, e isso não muda hoje."</strong> Repete por uma semana, especialmente quando der vontade de não.</p>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Resumo</h2>
+      <p>Sua identidade não é o que os outros postam de você, nem o que você consegue performar. É filiação — algo que te foi dado por amor e que se firma em Cristo. Antes de fazer, você é.</p>
+      <button class="btn btn-orange" onclick="startQuiz(2)" style="margin-top: 8px;">Fazer o Quiz da Aula 2
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </section>
+
+    <section class="lesson-section" id="aula-2-quiz-panel" style="display:none;">
+      <div id="quiz-mount-2"></div>
+    </section>
+
+    <div class="lesson-nav">
+      <button class="nav-pill" onclick="goPage('aula', 1)">← Voltar</button>
+      <button class="nav-pill" onclick="goPage('aula', 3)">Avançar →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== AULA 3 ===== -->
+<section class="page" id="page-aula-3" data-aula="3">
+  <div class="lesson-header">
+    <div class="lesson-header-inner">
+      <div>
+        <span class="lesson-eyebrow">✦ Aula 3 — Série Defesa da Fé · Pergunta 3</span>
+        <h1 class="lesson-title">Quem é Deus, afinal?</h1>
+      </div>
+      <div class="verse-inset">
+        "Ouve, ó Israel, o SENHOR, nosso Deus, é o único SENHOR."
+        <strong>Deuteronômio 6:4</strong>
+      </div>
+    </div>
+  </div>
+
+  <nav class="subnav">
+    <div class="subnav-scroll" data-aula-subnav="3">
+      <button class="pill active" data-section="intro">Introdução</button>
+      <button class="pill" data-section="pertencimento">Pertencimento</button>
+      <button class="pill" data-section="visao">Visão Bíblica</button>
+      <button class="pill" data-section="estudo">Estudo Bíblico</button>
+      <button class="pill" data-section="aplicacao">Aplicação</button>
+      <button class="pill" data-section="resumo">Resumo</button>
+      <button class="pill" data-section="quiz">Quiz</button>
+    </div>
+  </nav>
+
+  <div class="lesson-body">
+    <section class="lesson-section">
+      <h2>Introdução</h2>
+      <p>"Quem é Deus?" — provavelmente a pergunta mais antiga e mais nova ao mesmo tempo. Antiga, porque humanos perguntam isso há milênios. Nova, porque cada um de nós tem que perguntar pela primeira vez, no seu próprio jeito.</p>
+      <div class="highlight-box">
+        A resposta cristã é precisa e ousada: Deus é <b>um</b> em essência e <b>três</b> em pessoas — Pai, Filho e Espírito Santo. Não é matemática quebrada. É amor que existe em comunhão antes mesmo de existir o mundo.
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Pertencimento</h2>
+      <p>Se Deus é Trindade — relação eterna —, então fomos criados por uma comunidade pra viver em comunidade. Solidão não é o "estado natural"; o natural é amar e ser amado.</p>
+      <div class="quote-card">
+        Antes de existirem estrelas, já existia conversa entre Pai, Filho e Espírito. Você foi convidado pra essa conversa.
+        <span class="author">— Reflexão pastoral</span>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Visão Bíblica</h2>
+      <div class="contrast-grid">
+        <div class="contrast-col world">
+          <h4>Ideias comuns sobre Deus</h4>
+          <ul>
+            <li>Uma "energia" impessoal.</li>
+            <li>Um juiz distante e bravo.</li>
+            <li>Um amigão que aprova tudo.</li>
+          </ul>
+        </div>
+        <div class="contrast-col bible">
+          <h4>Deus na Escritura</h4>
+          <ul>
+            <li>Pessoal e relacional (Trindade).</li>
+            <li>Santo e próximo ao mesmo tempo.</li>
+            <li>Justo, amoroso, fiel.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Estudo Bíblico</h2>
+      <div class="verse-box">
+        "Ide, portanto, fazei discípulos de todas as nações, batizando-os em nome do Pai, e do Filho, e do Espírito Santo."
+        <span class="ref">Mateus 28:19</span>
+      </div>
+      <p>Jesus diz "<em>em nome</em>" (singular) do Pai, do Filho e do Espírito (três pessoas). Um Deus, três pessoas, uma só ação salvadora. Esse é o coração da fé cristã.</p>
+      <div class="reasons">
+        <div class="reason-card r1">
+          <div class="num">01</div>
+          <h4>Pai</h4>
+          <p>Origem amorosa de tudo.</p>
+        </div>
+        <div class="reason-card r2">
+          <div class="num">02</div>
+          <h4>Filho</h4>
+          <p>Deus que se fez próximo.</p>
+        </div>
+        <div class="reason-card r3">
+          <div class="num">03</div>
+          <h4>Espírito</h4>
+          <p>Deus que vive em nós hoje.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Aplicação</h2>
+      <p>Essa semana, ao orar, comece nomeando: "Pai...", e em algum momento mude pra "Jesus...", e termine pedindo "Espírito Santo, me ajuda a...". Não é fórmula — é treinar a memória do coração de que Deus é relação.</p>
+    </section>
+
+    <section class="lesson-section">
+      <h2>Resumo</h2>
+      <p>Deus é um só, eternamente em três pessoas: Pai, Filho e Espírito. É mistério, mas mistério que se revela em amor. E esse amor te alcança hoje — não em teoria, em vida.</p>
+      <button class="btn btn-orange" onclick="startQuiz(3)" style="margin-top: 8px;">Fazer o Quiz da Aula 3
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </section>
+
+    <section class="lesson-section" id="aula-3-quiz-panel" style="display:none;">
+      <div id="quiz-mount-3"></div>
+    </section>
+
+    <div class="lesson-nav">
+      <button class="nav-pill" onclick="goPage('aula', 2)">← Voltar</button>
+      <button class="nav-pill" disabled>Avançar →</button>
+    </div>
+  </div>
+</section>
+<!-- ===== /AULA 3 ===== -->
+
+<!-- Locked lessons 4–10 share a single template -->
+<section class="page" id="page-aula-locked">
+  <div class="locked-state">
+    <div class="lock-icon" aria-hidden="true">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+    </div>
+    <h2 id="locked-title">Aula em breve</h2>
+    <p>Esta aula ainda não foi liberada. Toda semana liberamos a próxima — fica de olho nas Novidades.</p>
+    <span class="em-breve">Em breve</span>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     PAGE 5 — PROGRESSO
+     ========================================================================== -->
+<section class="page" id="page-progresso">
+  <div class="progress-header">
+    <div class="progress-header-inner">
+      <span class="lesson-eyebrow">Sua jornada</span>
+      <h1>Meu Progresso</h1>
+      <div class="stat-pills">
+        <span class="stat-pill" id="stat-aulas">0/10 Aulas concluídas</span>
+        <span class="stat-pill" id="stat-media">Média no Quiz: —</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="overall-progress">
+    <div class="label">
+      <span>Progresso geral</span>
+      <span class="pct" id="overall-pct">0%</span>
+    </div>
+    <div class="overall-bar"><div class="overall-fill" id="overall-fill"></div></div>
+  </div>
+
+  <div class="lesson-list" id="lesson-list">
+    <!-- populated by JS -->
+  </div>
+
+  <div class="motivational" style="margin-left: 16px; margin-right: 16px;">
+    Cada aula que você termina <span class="hl">ecoa um pouco mais o propósito</span>. Não é sobre acertar tudo — é sobre estar aqui. Continua.
+  </div>
+</section>
+
+</main>
+
+<!-- ==========================================================================
+     FOOTER
+     ========================================================================== -->
+<footer class="footer">
+  <div class="inner">
+    Portal A Voz · Série Defesa da Fé · Estudo Bíblico para Adolescentes · Escola Convergência
+  </div>
+</footer>
+
+<!-- ==========================================================================
+     BOTTOM TAB BAR (mobile)
+     ========================================================================== -->
+<nav class="bottombar" aria-label="Navegação inferior">
+  <button class="bb-tab active" data-page="inicio">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+    Início
+  </button>
+  <button class="bb-tab" data-page="aula" data-aula="1">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h12a3 3 0 0 1 3 3v12H7a3 3 0 0 1-3-3V5z"/><path d="M4 5v12a3 3 0 0 0 3 3h12"/></svg>
+    Aulas
+  </button>
+  <button class="bb-tab" data-page="novidades">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4l8 3V7L3 10z"/><path d="M11 7l8-3v16l-8-3"/></svg>
+    Novidades
+  </button>
+  <button class="bb-tab" data-page="progresso">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+    Progresso
+  </button>
+</nav>
+
+<script>
+/* ==========================================================================
+   PORTAL A VOZ — vanilla JS
+   Easy-to-update file. No frameworks.
+   ========================================================================== */
+
+/* ---------- ROUTING ---------- */
+const PAGES = ['inicio', 'novidades', 'progresso'];
+const TOTAL_AULAS = 10;
+const UNLOCKED_AULAS = [1, 2, 3]; // <-- update this list to unlock more lessons
+
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById(pageId);
+  if (el) el.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+function setActiveTab(pageKey, aulaNum) {
+  // top nav
+  document.querySelectorAll('.mainnav-tab').forEach(t => {
+    const matchesPage = t.dataset.page === pageKey;
+    const matchesAula = !aulaNum || t.dataset.aula == String(aulaNum);
+    t.classList.toggle('active', matchesPage && matchesAula);
+  });
+  // bottom bar — collapse all "aula" pages under the "Aulas" tab
+  document.querySelectorAll('.bb-tab').forEach(t => {
+    const target = t.dataset.page;
+    let active = false;
+    if (pageKey === 'aula' && target === 'aula') active = true;
+    else if (pageKey === target) active = true;
+    t.classList.toggle('active', active);
+  });
+}
+
+function goPage(pageKey, aulaNum) {
+  if (pageKey === 'aula') {
+    const n = Number(aulaNum) || 1;
+    if (UNLOCKED_AULAS.includes(n)) {
+      showPage('page-aula-' + n);
+    } else {
+      document.getElementById('locked-title').textContent = 'Aula ' + n + ' — em breve';
+      showPage('page-aula-locked');
+    }
+    setActiveTab('aula', n);
+  } else {
+    showPage('page-' + pageKey);
+    setActiveTab(pageKey);
+  }
+  // refresh dynamic content
+  if (pageKey === 'progresso') renderProgress();
+}
+
+document.querySelectorAll('.mainnav-tab, .bb-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const page = btn.dataset.page;
+    const aula = btn.dataset.aula;
+    if (btn.classList.contains('locked')) {
+      // still navigate to locked-state so user gets feedback
+      goPage('aula', aula || 99);
+      return;
+    }
+    goPage(page, aula);
+  });
+});
+
+/* ---------- LESSON SUB-NAV ---------- */
+document.querySelectorAll('[data-aula-subnav]').forEach(nav => {
+  const aulaNum = nav.dataset.aulaSubnav;
+  nav.querySelectorAll('.pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      nav.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const sec = pill.dataset.section;
+      const lessonBody = nav.parentElement.nextElementSibling;
+      const quizPanel = document.getElementById('aula-' + aulaNum + '-quiz-panel');
+      if (sec === 'quiz') {
+        // hide all other sections, show quiz panel
+        lessonBody.querySelectorAll('.lesson-section').forEach(s => {
+          if (s !== quizPanel) s.style.display = 'none';
+        });
+        quizPanel.style.display = '';
+        startQuiz(Number(aulaNum));
+      } else {
+        // show all standard sections, hide quiz panel
+        lessonBody.querySelectorAll('.lesson-section').forEach(s => { s.style.display = ''; });
+        if (quizPanel) quizPanel.style.display = 'none';
+        // scroll to the chosen section by index (simple approximation)
+        const order = ['intro','pertencimento','visao','estudo','aplicacao','resumo'];
+        const idx = order.indexOf(sec);
+        const sections = lessonBody.querySelectorAll('.lesson-section');
+        if (idx >= 0 && sections[idx]) {
+          const top = sections[idx].getBoundingClientRect().top + window.scrollY - 140;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      }
+    });
+  });
+});
+
+/* ==========================================================================
+   QUIZ
+   ADD NEW AULA: append a new entry to QUIZZES with 10 questions.
+   Each question: { q: "...", options: ["A","B","C","D"], correct: 0..3, explain: "..." }
+   ========================================================================== */
+const QUIZZES = {
+  1: [
+    { q: "De acordo com a aula, qual é o nosso 'único bem maior'?",
+      options: ["O reconhecimento dos amigos", "Pertencer a Cristo", "Ter uma família perfeita", "Realizar todos os sonhos"],
+      correct: 1,
+      explain: "Nosso maior bem é não pertencermos a nós mesmos, mas a Cristo (cf. 1 Co 6:19-20)." },
+    { q: "Qual versículo a aula usa para falar de 'fomos comprados por preço'?",
+      options: ["João 3:16", "Romanos 8:1", "1 Coríntios 6:20", "Efésios 2:8"],
+      correct: 2,
+      explain: "1 Coríntios 6:20 — 'fostes comprados por preço'." },
+    { q: "Segundo a 'visão bíblica' da aula, seu valor está em:",
+      options: ["No que você produz", "Em ser feito à imagem de Deus", "No número de seguidores", "Na sua independência"],
+      correct: 1,
+      explain: "A Bíblia ancora o valor humano em sermos imagem de Deus (Gn 1:27)." },
+    { q: "A aula afirma que liberdade, na visão bíblica, é:",
+      options: ["Não pertencer a ninguém", "Pertencer a quem te ama de verdade", "Fazer tudo o que sente vontade", "Ficar sozinho"],
+      correct: 1,
+      explain: "Liberdade cristã é pertencer ao Pai bom — não ausência de vínculo." },
+    { q: "Quem é apresentado como o 'caminho, a verdade e a vida'?",
+      options: ["O Espírito Santo", "Moisés", "Jesus Cristo", "Os apóstolos"],
+      correct: 2,
+      explain: "João 14:6 — palavra do próprio Jesus." },
+    { q: "A aula descreve a vida cristã como começando quando:",
+      options: ["Você se torna uma versão melhor de si", "Você descobre que seu maior bem está em alguém que te encontrou primeiro", "Você decora o catecismo", "Você se torna líder de jovens"],
+      correct: 1,
+      explain: "O ponto de partida é a graça que te alcança — não o seu mérito." },
+    { q: "Qual é a pergunta de pertencimento que abre a aula?",
+      options: ["O que eu vou fazer da vida?", "De quem eu sou?", "Quanto eu valho?", "Onde eu moro?"],
+      correct: 1,
+      explain: "Antes de qualquer doutrina, há a pergunta: de quem eu sou?" },
+    { q: "De acordo com a aula, pertencer a Cristo é:",
+      options: ["Perder a personalidade", "Descobrir quem você sempre foi diante dEle", "Ficar igual a todo mundo", "Viver com medo"],
+      correct: 1,
+      explain: "Pertencer a Cristo revela — não apaga — sua identidade verdadeira." },
+    { q: "Qual destas é uma marca da 'visão do mundo' criticada na aula?",
+      options: ["Você é amado antes de produzir", "Você é o que você produz", "Seu valor é inegociável", "Você foi feito à imagem de Deus"],
+      correct: 1,
+      explain: "A cultura mede o ser pela performance — a Bíblia, pelo amor." },
+    { q: "A aula propõe qual exercício prático para a semana?",
+      options: ["Decorar Salmos 23", "Escolher uma área da vida e perguntar 'quem é meu dono nela?'", "Jejuar de redes por 40 dias", "Fazer 100 orações por dia"],
+      correct: 1,
+      explain: "Notar onde a gente entrega o leme — sem corrigir, só notar — é o primeiro passo." },
+  ],
+  2: [
+    { q: "A aula 2 começa afirmando que identidade, na fé cristã, é:",
+      options: ["Algo que você cria do zero", "Algo que te é dado", "Um produto a ser vendido", "Um rótulo do mundo"],
+      correct: 1,
+      explain: "A identidade cristã é recebida — começa em filiação." },
+    { q: "Qual é a primeira palavra da identidade cristã, segundo a aula?",
+      options: ["Servo", "Filho", "Soldado", "Pecador"],
+      correct: 1,
+      explain: "Filho — vínculo, não título (1 Jo 3:1)." },
+    { q: "Qual texto bíblico fundamenta a aula sobre identidade?",
+      options: ["Salmo 23", "1 João 3:1", "Apocalipse 21:4", "Provérbios 3:5"],
+      correct: 1,
+      explain: "'Vede que grande amor... ao ponto de sermos chamados filhos de Deus' (1 Jo 3:1)." },
+    { q: "Ser imagem de Deus implica, segundo a aula:",
+      options: ["Ser igual a Deus", "Valor inegociável, vocação e comunidade", "Não ter limites", "Ser perfeito"],
+      correct: 1,
+      explain: "Imagem implica valor (antes do mérito), vocação (refletir Alguém) e comunidade." },
+    { q: "Qual é a frase do 'mundo' que a aula contrasta com a Bíblia?",
+      options: ["Você foi definido por Quem te criou", "Você se define a si mesmo", "Sua identidade é firmada em Cristo", "Filiação = valor"],
+      correct: 1,
+      explain: "A cultura diz 'você se define'; a Bíblia diz 'você foi definido por amor'." },
+    { q: "João, em 1 João 3:1, NÃO diz que filhos de Deus:",
+      options: ["São amados pelo Pai", "Podem virar filhos se se esforçarem", "Já são, de fato, filhos", "Receberam grande amor"],
+      correct: 1,
+      explain: "João afirma um fato — 'somos' — não uma meta a alcançar." },
+    { q: "A vida cristã, segundo a aula, é:",
+      options: ["Performar pra ser aceito", "Viver à altura do que já é verdade sobre você", "Tentar virar outra pessoa", "Esconder seus defeitos"],
+      correct: 1,
+      explain: "É viver a partir da identidade já dada — não pra conquistá-la." },
+    { q: "Qual destas frases o aluno é convidado a substituir, na aplicação da aula?",
+      options: ["'Sou filho(a) de Deus'", "'Eu sou um fracasso'", "'Deus me ama'", "'Hoje vou tentar'"],
+      correct: 1,
+      explain: "Trocar a fala destrutiva pela verdade da filiação." },
+    { q: "Qual destas NÃO é uma característica da visão bíblica de identidade na aula?",
+      options: ["Filiação como valor", "Identidade firmada em Cristo", "Definida por Quem te criou", "Performance como valor"],
+      correct: 3,
+      explain: "Performance é a lógica da cultura — a Bíblia inverte isso." },
+    { q: "O resumo da aula afirma que, antes de fazer, você:",
+      options: ["Precisa provar seu valor", "É (filho de Deus)", "Deve se inventar", "Deve agradar a todos"],
+      correct: 1,
+      explain: "Identidade vem antes da ação — você é, e a partir disso age." },
+  ],
+  3: [
+    { q: "A aula 3 afirma que Deus é:",
+      options: ["Uma energia impessoal", "Um em essência e três em pessoas", "Três deuses diferentes", "Apenas um conceito"],
+      correct: 1,
+      explain: "A doutrina cristã clássica: um Deus, três pessoas — Pai, Filho e Espírito Santo." },
+    { q: "Qual texto a aula usa pra abrir o estudo sobre a Trindade?",
+      options: ["Mateus 28:19", "Lucas 2:11", "Apocalipse 1:8", "Atos 2:1"],
+      correct: 0,
+      explain: "Em Mateus 28:19 Jesus diz 'em nome (singular) do Pai, do Filho e do Espírito'." },
+    { q: "Em Mateus 28:19, Jesus diz 'em nome' (singular) de quantas pessoas?",
+      options: ["Uma", "Duas", "Três", "Quatro"],
+      correct: 2,
+      explain: "Pai, Filho e Espírito Santo — três pessoas, um só nome." },
+    { q: "Qual é o significado prático de Deus ser Trindade, segundo a aula?",
+      options: ["Solidão é o estado natural", "Fomos criados por uma comunidade pra viver em comunidade", "Não precisamos de igreja", "Deus é distante"],
+      correct: 1,
+      explain: "Se Deus é relação eterna, fomos feitos pra relação." },
+    { q: "Qual destas NÃO é uma 'ideia comum sobre Deus' criticada na aula?",
+      options: ["Energia impessoal", "Juiz distante e bravo", "Pessoal e relacional", "Amigão que aprova tudo"],
+      correct: 2,
+      explain: "'Pessoal e relacional' é justamente a visão bíblica — não um equívoco cultural." },
+    { q: "Como a aula descreve o papel do Pai na Trindade?",
+      options: ["Origem amorosa de tudo", "Apenas o Criador distante", "Quem julga sem amor", "O que veio à terra"],
+      correct: 0,
+      explain: "O Pai é apresentado como origem amorosa — não como tirano." },
+    { q: "Como a aula descreve o papel do Filho?",
+      options: ["Deus que se fez próximo", "Um anjo poderoso", "Um profeta entre outros", "Uma criação superior"],
+      correct: 0,
+      explain: "Em Cristo, Deus se fez carne e habitou entre nós (Jo 1:14)." },
+    { q: "Como a aula descreve o papel do Espírito Santo?",
+      options: ["Uma força impessoal", "Deus que vive em nós hoje", "Um anjo guardião", "Apenas um símbolo"],
+      correct: 1,
+      explain: "O Espírito é Deus presente — pessoal — atuante na vida cristã." },
+    { q: "Qual versículo afirma 'o SENHOR, nosso Deus, é o único SENHOR'?",
+      options: ["Salmo 1:1", "Deuteronômio 6:4", "João 1:1", "Gênesis 1:1"],
+      correct: 1,
+      explain: "Deuteronômio 6:4 — o 'Shemá', confissão central da fé bíblica." },
+    { q: "A aula propõe qual prática para a semana?",
+      options: ["Memorizar 30 versículos", "Ao orar, alternar 'Pai... Jesus... Espírito Santo'", "Jejuar três dias", "Ler toda a Bíblia"],
+      correct: 1,
+      explain: "Treinar a memória do coração de que Deus é relação — não fórmula, prática." },
+  ],
+};
+
+/* ---------- QUIZ STATE ---------- */
+const quizState = {
+  // per aula: { current: 0, answers: [], finished: false }
+};
+
+function startQuiz(aulaNum) {
+  // make sure we're on the right page + the quiz panel is visible
+  goPage('aula', aulaNum);
+  // switch the subnav to "Quiz"
+  const nav = document.querySelector('[data-aula-subnav="' + aulaNum + '"]');
+  if (nav) {
+    nav.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    const quizPill = nav.querySelector('[data-section="quiz"]');
+    if (quizPill) quizPill.classList.add('active');
+  }
+  const lessonBody = document.querySelector('#page-aula-' + aulaNum + ' .lesson-body');
+  const quizPanel = document.getElementById('aula-' + aulaNum + '-quiz-panel');
+  if (lessonBody && quizPanel) {
+    lessonBody.querySelectorAll('.lesson-section').forEach(s => {
+      if (s !== quizPanel) s.style.display = 'none';
+    });
+    quizPanel.style.display = '';
+  }
+  quizState[aulaNum] = { current: -1, answers: [], finished: false };
+  renderQuizIntro(aulaNum);
+}
+
+function renderQuizIntro(aulaNum) {
+  const mount = document.getElementById('quiz-mount-' + aulaNum);
+  mount.innerHTML = `
+    <div class="quiz-intro">
+      <div class="corneta-big" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 10v4l8 3V7L3 10z"/><path d="M11 7l8-3v16l-8-3"/><path d="M19 9c1.5 1 1.5 5 0 6"/>
+        </svg>
+      </div>
+      <h2>Quiz — Aula ${aulaNum}</h2>
+      <p>10 perguntas. Sem cronômetro. No fim, você revê o que acertou e o que não. Bora?</p>
+      <button class="btn btn-orange" onclick="renderQuizQuestion(${aulaNum}, 0)">Começar →</button>
+    </div>
+  `;
+}
+
+function renderQuizQuestion(aulaNum, idx) {
+  const quiz = QUIZZES[aulaNum];
+  const state = quizState[aulaNum];
+  state.current = idx;
+  const q = quiz[idx];
+  const mount = document.getElementById('quiz-mount-' + aulaNum);
+  const pct = Math.round(((idx) / quiz.length) * 100);
+  mount.innerHTML = `
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${pct}%;"></div></div>
+    <div class="quiz-progress-label">Pergunta ${idx + 1} de ${quiz.length}</div>
+    <div class="quiz-question-card">
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-options" id="opts-${aulaNum}">
+        ${q.options.map((opt, i) => `
+          <button class="quiz-option" data-i="${i}">
+            <span class="letter">${String.fromCharCode(65+i)}</span>
+            <span>${opt}</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="quiz-next" id="next-${aulaNum}"></div>
+    </div>
+  `;
+  mount.querySelectorAll('.quiz-option').forEach(btn => {
+    btn.addEventListener('click', () => handleAnswer(aulaNum, idx, Number(btn.dataset.i)));
+  });
+  // scroll into view
+  mount.scrollIntoView ? null : null; // intentional: no-op (scrollIntoView avoided)
+}
+
+function handleAnswer(aulaNum, idx, choice) {
+  const quiz = QUIZZES[aulaNum];
+  const state = quizState[aulaNum];
+  const q = quiz[idx];
+  state.answers[idx] = choice;
+  // disable + style options
+  const opts = document.querySelectorAll('#opts-' + aulaNum + ' .quiz-option');
+  opts.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correct) btn.classList.add('correct');
+    else if (i === choice) btn.classList.add('wrong');
+  });
+  // show next button
+  const nextEl = document.getElementById('next-' + aulaNum);
+  const isLast = idx === quiz.length - 1;
+  nextEl.innerHTML = `<button class="quiz-next-btn">${isLast ? 'Ver resultado' : 'Próxima'} →</button>`;
+  nextEl.querySelector('button').addEventListener('click', () => {
+    if (isLast) renderQuizResults(aulaNum);
+    else renderQuizQuestion(aulaNum, idx + 1);
+  });
+}
+
+function renderQuizResults(aulaNum) {
+  const quiz = QUIZZES[aulaNum];
+  const state = quizState[aulaNum];
+  state.finished = true;
+  const score = quiz.reduce((acc, q, i) => acc + (state.answers[i] === q.correct ? 1 : 0), 0);
+  // persist
+  saveQuizScore(aulaNum, score);
+  let msg;
+  if (score >= 9) msg = 'Mandou demais! Você ouviu, leu e absorveu.';
+  else if (score >= 7) msg = 'Muito bom! Algumas anotações pra revisar e você fica craque.';
+  else if (score >= 5) msg = 'Tá no caminho. Volta no resumo, releia e refaça quando quiser.';
+  else msg = 'Sem peso — quiz é pra aprender. Bora reler a aula e tentar de novo.';
+
+  const mount = document.getElementById('quiz-mount-' + aulaNum);
+  mount.innerHTML = `
+    <div class="quiz-results">
+      <div class="quiz-progress-label" style="color:var(--soft-cream); opacity:0.7;">Resultado — Aula ${aulaNum}</div>
+      <div class="quiz-score">${score}<span style="font-size:0.4em; color:var(--soft-cream); opacity:0.6;">/${quiz.length}</span></div>
+      <div class="quiz-score-msg">${msg}</div>
+    </div>
+    <div class="review-list">
+      ${quiz.map((q, i) => {
+        const ok = state.answers[i] === q.correct;
+        return `
+          <div class="review-item ${ok ? '' : 'wrong'}">
+            <div class="review-q">${i+1}. ${q.q}</div>
+            <div class="review-a">Sua resposta: <strong>${q.options[state.answers[i]] ?? '—'}</strong></div>
+            ${!ok ? `<div class="review-a">Correta: <strong>${q.options[q.correct]}</strong></div>` : ''}
+            <div class="review-explain">${q.explain}</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <div style="text-align:center;">
+      <button class="retry-btn" onclick="startQuiz(${aulaNum})">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+        Tentar novamente
+      </button>
+    </div>
+  `;
+}
+
+/* ---------- PROGRESS PERSISTENCE (localStorage) ---------- */
+function loadProgress() {
+  try {
+    return JSON.parse(localStorage.getItem('portal-a-voz:progress') || '{}');
+  } catch { return {}; }
+}
+function saveProgress(p) {
+  localStorage.setItem('portal-a-voz:progress', JSON.stringify(p));
+}
+function saveQuizScore(aulaNum, score) {
+  const p = loadProgress();
+  p[aulaNum] = { score, completed: true };
+  saveProgress(p);
+}
+
+/* ---------- PROGRESS PAGE ---------- */
+const AULA_TITLES = {
+  1: { t: "Qual é o nosso único bem maior?", s: "Pertencer a Cristo" },
+  2: { t: "Quem é você diante de Deus?",     s: "Identidade e filiação" },
+  3: { t: "Quem é Deus, afinal?",            s: "Trindade e mistério" },
+  4: { t: "O que a Bíblia é, exatamente?",   s: "Em breve" },
+  5: { t: "Por que o mundo está quebrado?",  s: "Em breve" },
+  6: { t: "O que Jesus veio fazer?",         s: "Em breve" },
+  7: { t: "O que é a graça?",                s: "Em breve" },
+  8: { t: "Por que orar?",                   s: "Em breve" },
+  9: { t: "Por que viver em comunidade?",    s: "Em breve" },
+ 10: { t: "Pra onde tudo isso aponta?",      s: "Em breve" },
+};
+
+function renderProgress() {
+  const p = loadProgress();
+  const completed = Object.values(p).filter(x => x.completed).length;
+  const scores = Object.values(p).map(x => x.score).filter(s => typeof s === 'number');
+  const avg = scores.length ? (scores.reduce((a,b) => a+b, 0) / scores.length).toFixed(1) : '—';
+  const pct = Math.round((completed / TOTAL_AULAS) * 100);
+
+  document.getElementById('stat-aulas').textContent = `${completed}/${TOTAL_AULAS} Aulas concluídas`;
+  document.getElementById('stat-media').textContent = `Média no Quiz: ${avg}${typeof avg === 'string' && avg !== '—' ? '/10' : ''}`;
+  document.getElementById('overall-pct').textContent = pct + '%';
+  document.getElementById('overall-fill').style.width = pct + '%';
+
+  const list = document.getElementById('lesson-list');
+  let html = '';
+  for (let i = 1; i <= TOTAL_AULAS; i++) {
+    const isUnlocked = UNLOCKED_AULAS.includes(i);
+    const status = p[i];
+    const isDone = status && status.completed;
+    html += `
+      <div class="lesson-row ${isUnlocked ? '' : 'locked'}" ${isUnlocked ? `onclick="goPage('aula', ${i})" style="cursor:pointer;"` : ''}>
+        <div class="left">
+          <div class="lesson-num">${String(i).padStart(2,'0')}</div>
+          <div class="lesson-info">
+            <div class="t">${AULA_TITLES[i].t}</div>
+            <div class="s">${AULA_TITLES[i].s}</div>
+          </div>
+        </div>
+        <div class="right">
+          ${isDone ? `
+            <span class="check-badge" aria-label="Concluída">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>
+            </span>
+            <span class="score-pill">${status.score}/10</span>
+          ` : (isUnlocked ? `<span class="score-pill" style="background:#e6e4ef; color:var(--muted);">Pendente</span>`
+                          : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted);"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`)}
+        </div>
+      </div>
+    `;
+  }
+  list.innerHTML = html;
+}
+
+/* ---------- INIT ---------- */
+window.goPage = goPage;
+window.startQuiz = startQuiz;
+window.renderQuizQuestion = renderQuizQuestion;
+
+// Initial render
+renderProgress();
+</script>
+
+</body>
+</html>
